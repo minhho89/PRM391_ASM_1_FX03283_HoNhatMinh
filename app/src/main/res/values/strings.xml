@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Your Quiz</string>
+    <string name="greetings">Welcome to Your Quiz v1.0!</string>
+
+    <!--    For name input fragment-->
+    <string name="inputName">Please input your name to continue.</string>
+    <string name="title_hello">Hello,</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_ok">OK</string>
+
+    <!--    For Heading-->
+    <string name="title_user">User</string>
+    <string name="title_name">Name</string>
+    <string name="title_continue">Name</string>
+    <string name="title_time_remain">Time remaining you have in second:</string>
+    <string name="title_clock_default">00</string>
+
+
+    <!--    For Quizzes-->
+    <string name="q1">What is Deoxyribonucleic acid commonly referred to as?</string>
+    <string name="q1_1">RNA</string>
+    <string name="q1_2">CIA</string>
+    <string name="q1_3">DNA</string>
+    <string name="q2">What process involves treating rubber with sulfur to harden it?</string>
+    <string name="q2_ans">Vulcanizing</string>
+    <string name="q3">Name two different organelles of a eukaryotic cell.</string>
+    <string name="q3_1">Ribosome</string>
+    <string name="q3_2">Plasmids</string>
+    <string name="q3_3">Golgi apparatus</string>
+    <string name="q3_4">Diploid</string>
+    <string name="q4">This word describes the force that pulls objects to the middle of the earth?</string>
+    <string name="q4_ans">Gravity</string>
+    <string name="q5">What type of trees yield the resin used to produce turpentine?</string>
+    <string name="q5_1">Palm trees</string>
+    <string name="q5_2">Pine trees</string>
+    <string name="q5_3">Oak trees</string>
+    <string name="q6">Cumulus and Cirrus are types of what?</string>
+    <string name="q6_ans1">Clouds</string>
+    <string name="q6_ans2">Cloud</string>
+    <string name="q7">Which two planets have one or more moons?</string>
+    <string name="q7_1">Ceres</string>
+    <string name="q7_2">Mercury</string>
+    <string name="q7_3">Earth</string>
+    <string name="q7_4">Pluto</string>
+    <string name="q8">Where in the human body would you find the scaphoid bone?</string>
+    <string name="q8_ans">Wrist</string>
+    <string name="q9">Which grow upwards Stalactites or Stalagmites?</string>
+    <string name="q9_1">Stalactites</string>
+    <string name="q9_2">Stalagmites</string>
+    <string name="q10">What process involves heating an ore to obtain a metal?</string>
+    <string name="q10_ans">Smelting</string>
+
+    <!--    For Button-->
+    <string name="title_submit">Submit</string>
+
+    <!--    For Toast-->
+    <string name="perfect">Perfect!</string>
+    <string name="try_again">Try again!</string>
+    <string name="scored_1">You scored</string>
+    <string name="scored_2">out of</string>
+
+
+</resources>

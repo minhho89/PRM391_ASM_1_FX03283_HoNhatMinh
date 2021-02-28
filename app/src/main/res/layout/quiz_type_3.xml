@@ -6,9 +6,17 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tv_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TYPE THREE"
+        android:layout_margin="@dimen/margin_standard"
+        android:padding="@dimen/padding_element"/>
+    <EditText
+        android:id="@+id/et_user_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="your answer"
         android:layout_margin="@dimen/margin_standard"
         android:padding="@dimen/padding_element"/>
 </LinearLayout>

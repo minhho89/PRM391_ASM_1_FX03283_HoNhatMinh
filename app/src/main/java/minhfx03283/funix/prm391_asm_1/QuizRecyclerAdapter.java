@@ -31,6 +31,12 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     public QuizRecyclerAdapter(List<QuizRecyclerViewType> viewTypes) {
         this.viewTypes = viewTypes;
     }
+
+    public QuizRecyclerAdapter(Context context, List<Quiz> quizzes) {
+        this.context = context;
+        this.quizzes = quizzes;
+    }
+
     // Creates new ViewHolders (invoked by the layout manager)
     @NonNull
     @Override

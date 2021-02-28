@@ -12,6 +12,7 @@ public class QuizType1 extends Quiz {
     public QuizType1() {
     }
 
+
     public Set<String> getOptionList() {
         return mOptionList;
     }

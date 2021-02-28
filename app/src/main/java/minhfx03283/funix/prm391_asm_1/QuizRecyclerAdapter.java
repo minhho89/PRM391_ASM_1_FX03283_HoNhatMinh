@@ -156,12 +156,12 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             // Load checked state
                             loadCheckBoxCheckedStated(quiz, cb);
+
                             String buttonText = cb.getText().toString();
                             if (isChecked) {
                                 // Save user choices to HashMap
                                 userAnswerHashMap.get(quiz.getId()).getAnswers()
                                         .add(buttonText);
-
                             } else {
                                 // Remove choices from HashMap
                                 userAnswerHashMap.get(quiz.getId()).getAnswers()
@@ -177,6 +177,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 ViewHolderType3 holderType3 = (ViewHolderType3) holder;
                 QuizType3 quizType3 = (QuizType3) quiz;
                 holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());
+
+                
             }
         }
 

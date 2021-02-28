@@ -84,12 +84,25 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
                     holderType1.removeDuplicate(holderType1.getRdOptions());
 
+                    // Add radioButtons
+
                     for (String s : quizType1.getOptionList()) {
                         RadioButton rb = new RadioButton(
                                 holderType1.getLinearLayout().getContext());
                         rb.setText(s);
                         holderType1.getRdOptions().addView(rb);
+
+                        // Set Listener
+                        rb.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
                     }
+
+
+
                 }
             }
 

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         //CIA
         //DNA
         QuizType1 q1 = new QuizType1();
-        q1.setQuiz("1. " + getResources().getString(R.string.q1));
+        q1.setQuiz(getResources().getString(R.string.q1));
         Set<String> q1Option = new HashSet<String>(
                 Arrays.asList(
                         getResources().getString(R.string.q1_1),
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 2. What process involves treating rubber with sulfur to harden it? (Correct Answer is "Vulcanizing")
         QuizType3 q2 = new QuizType3();
-        q2.setQuiz("2. " + getResources().getString(R.string.q2));
+        q2.setQuiz(getResources().getString(R.string.q2));
         Set<String> q2Answer = new HashSet<String>(Arrays.asList(getResources().getString(R.string.q2_ans)));
         q2.setAnswers(q2Answer);
 
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         //Golgi apparatus
         //Diploid
         QuizType2 q3 = new QuizType2();
-        q3.setQuiz("3. " + getResources().getString(R.string.q3));
+        q3.setQuiz(getResources().getString(R.string.q3));
         Set<String> q3Option = new HashSet<String>(Arrays.asList(
                 getResources().getString(R.string.q3_1),
                 getResources().getString(R.string.q3_2),
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 //        Pine trees
 //        Oak trees
         QuizType1 q5 = new QuizType1();
-        q5.setQuiz("5. " + getResources().getString(R.string.q5));
+        q5.setQuiz(getResources().getString(R.string.q5));
         Set<String> q5Option = new HashSet<>(Arrays.asList(
                 getResources().getString(R.string.q5_1),
                 getResources().getString(R.string.q5_2),
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        6. Cumulus and Cirrus are types of what? (Correct Answer is "Clouds" or "Cloud")
         QuizType3 q6 = new QuizType3();
-        q6.setQuiz("6. " + getResources().getString(R.string.q6));
+        q6.setQuiz(getResources().getString(R.string.q6));
         Set<String> q6Answer = new HashSet<>(Arrays.asList(
                 getResources().getString(R.string.q6_ans1),
                 getResources().getString(R.string.q6_ans2)));
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         //Earth
         //Pluto
         QuizType2 q7 = new QuizType2();
-        q7.setQuiz("7. " + getResources().getString(R.string.q7));
+        q7.setQuiz( getResources().getString(R.string.q7));
         Set<String> q7Option = new HashSet<>(Arrays.asList(
                 getResources().getString(R.string.q7_1),
                 getResources().getString(R.string.q7_2),
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         //8. Where in the human body would you find the scaphoid bone? (Correct Answer is "Wrist")
         QuizType3 q8 = new QuizType3();
-        q8.setQuiz("8. " + getResources().getString(R.string.q8));
+        q8.setQuiz( getResources().getString(R.string.q8));
         q8.setAnswers(new HashSet<String>(
                 Arrays.asList(getResources().getString(R.string.q8_ans))));
 
@@ -140,14 +140,14 @@ public class MainActivity extends AppCompatActivity {
         //Stalactites
         //Stalagmites
         QuizType1 q9 = new QuizType1();
-        q9.setQuiz("9. " + getResources().getString(R.string.q9));
+        q9.setQuiz(getResources().getString(R.string.q9));
         q9.setOptionList(new HashSet<String>(Arrays.asList(getResources().getString(R.string.q9_1),
                 getResources().getString(R.string.q9_2))));
         q9.setAnswers(new HashSet<String>(Arrays.asList(getResources().getString(R.string.q9_2))));
 
         //10. What process involves heating an ore to obtain a metal? (Correct Answer is "Smelting")
         QuizType3 q10 = new QuizType3();
-        q10.setQuiz("10. " + getResources().getString(R.string.q10));
+        q10.setQuiz(getResources().getString(R.string.q10));
         q10.setAnswers(new HashSet<String>(Arrays.asList(getResources().getString(R.string.q10_ans))));
 
         // Add quiz to Quiz list
@@ -161,6 +161,12 @@ public class MainActivity extends AppCompatActivity {
         quizzes.add(q8);
         quizzes.add(q9);
         quizzes.add(q10);
+
+        quizzes.add(q1);
+        quizzes.add(q2);
+        quizzes.add(q3);
+        quizzes.add(q4);
+        quizzes.add(q5);
 
 
         return quizzes;

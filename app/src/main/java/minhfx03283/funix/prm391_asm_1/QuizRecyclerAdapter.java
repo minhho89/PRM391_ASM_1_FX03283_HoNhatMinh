@@ -67,7 +67,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case LAYOUT_1:
             // Views of Type 1 quiz
                 if (quiz instanceof QuizType1) {
-                    position = 0;
                     ViewHolderType1 holderType1 = (ViewHolderType1) holder;
                     QuizType1 type1Quiz = (QuizType1)quiz;
                     for (String s : type1Quiz.getOptionList()) {
@@ -75,7 +74,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         rb.setText(s);
                     }
                 }
-
                 break;
             case LAYOUT_2:
                 break;

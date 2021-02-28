@@ -17,7 +17,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_1;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_2;
@@ -30,11 +34,13 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     List<Quiz> quizzes;
     // List of viewTypes
     private List<QuizRecyclerViewType> viewTypes;
+    private HashMap<Integer, UserAnswer> userAnswerHashMap; // to store user answers
 
     public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes, List<Quiz> quizzes) {
         this.context = context;
         this.viewTypes = viewTypes;
         this.quizzes = quizzes;
+        userAnswerHashMap = new HashMap<>();
     }
 
     // Creates new ViewHolders (invoked by the layout manager)
@@ -68,6 +74,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final String TAG = "Quizzes iterator: ";
+        Log.d(TAG, "onBindViewHolder: " + userAnswerHashMap.toString());
+
 
         // If position == quizzes.size() then button added
         if (position < quizzes.size()) {
@@ -96,12 +104,12 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                         rb.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
+                                // TODO: save answer to dataset
+                                saveAnswerType1(userAnswerHashMap,
+                                        rb.getText().toString(), quiz.getId());
                             }
                         });
                     }
-
-
 
                 }
             }
@@ -133,6 +141,18 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         }
 
         // Add button when reach to the view's end
+    }
+
+    /**
+     * Saves user answers to HashMap (dataset) of Type 1 quiz
+     * @param userAnswerHashMap
+     */
+    private void saveAnswerType1(HashMap<Integer, UserAnswer> userAnswerHashMap,
+                                 String answer, int quizId) {
+        UserAnswer userAnswer = new UserAnswer();
+        Set<String> answers = new HashSet<String>(Arrays.asList(answer));
+        userAnswer.setAnswers(answers);
+        this.userAnswerHashMap.put(quizId, userAnswer);
     }
 
     @Override

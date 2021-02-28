@@ -1,9 +1,11 @@
 package minhfx03283.funix.prm391_asm_1;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -60,24 +62,50 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     // Replace the content of views
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        final String TAG = "Quizzes iterator: ";
         Quiz quiz = quizzes.get(position);
 
+        Log.d(TAG, "onBindViewHolder: ************************");
+        Log.d("Quizzes", "onBindViewHolder: QuizId: "
+                + quiz.getId() + " Type: " + viewTypes.get(position).getViewType());
+        Log.d(TAG, "onBindViewHolder: ************************");
         switch (viewTypes.get(position).getViewType()) {
-
             case LAYOUT_1:
             // Views of Type 1 quiz
                 if (quiz instanceof QuizType1) {
                     ViewHolderType1 holderType1 = (ViewHolderType1) holder;
-                    QuizType1 type1Quiz = (QuizType1)quiz;
-                    for (String s : type1Quiz.getOptionList()) {
-                        RadioButton rb = new RadioButton(holderType1.getLinearLayout().getContext());
+                    QuizType1 quizType1 = (QuizType1)quiz;
+                    holderType1.setTvQuestion(quizType1.getQuiz());
+
+                    for (String s : quizType1.getOptionList()) {
+                        RadioButton rb = new RadioButton(
+                                holderType1.getLinearLayout().getContext());
                         rb.setText(s);
+                        holderType1.getRdOptions().addView(rb);
                     }
                 }
                 break;
             case LAYOUT_2:
+                // Views of Type 2 quiz
+                if (quiz instanceof QuizType2) {
+                    ViewHolderType2 holderType2 = (ViewHolderType2) holder;
+                    QuizType2 quizType2 = (QuizType2)quiz;
+                    holderType2.setTvQuestion(quizType2.getQuiz());
+
+                    for (String s : quizType2.getOptionList()) {
+                        CheckBox cb = new CheckBox(
+                                holderType2.getLinearLayout().getContext());
+                        cb.setText(s);
+                        holderType2.getLinearLayout().addView(cb);
+                    }
+                }
                 break;
             case LAYOUT_3:
+                if (quiz instanceof QuizType3) {
+                    ViewHolderType3 holderType3 = (ViewHolderType3) holder;
+                    QuizType3 quizType3 = (QuizType3) quiz;
+                    holderType3.setTvQuestion(quizType3.getQuiz());
+                }
                 break;
             default: return;
         }
@@ -120,6 +148,26 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tvQuestion.setText(text);
         }
 
+        public void setLinearLayout(LinearLayout linearLayout) {
+            this.linearLayout = linearLayout;
+        }
+
+        public TextView getTvQuestion() {
+            return tvQuestion;
+        }
+
+        public void setTvQuestion(TextView tvQuestion) {
+            this.tvQuestion = tvQuestion;
+        }
+
+        public RadioGroup getRdOptions() {
+            return rdOptions;
+        }
+
+        public void setRdOptions(RadioGroup rdOptions) {
+            this.rdOptions = rdOptions;
+        }
+
         public LinearLayout getLinearLayout() {
             return linearLayout;
         }
@@ -136,6 +184,22 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         private void setTvQuestion(String text) {
             tvQuestion.setText(text);
+        }
+
+        public LinearLayout getLinearLayout() {
+            return linearLayout;
+        }
+
+        public void setLinearLayout(LinearLayout linearLayout) {
+            this.linearLayout = linearLayout;
+        }
+
+        public TextView getTvQuestion() {
+            return tvQuestion;
+        }
+
+        public void setTvQuestion(TextView tvQuestion) {
+            this.tvQuestion = tvQuestion;
         }
     }
 
@@ -154,6 +218,30 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         private void setEtAnswer(String text) {
             etAnswer.setText(text);
+        }
+
+        public LinearLayout getLinearLayout() {
+            return linearLayout;
+        }
+
+        public void setLinearLayout(LinearLayout linearLayout) {
+            this.linearLayout = linearLayout;
+        }
+
+        public TextView getTvQuestion() {
+            return tvQuestion;
+        }
+
+        public void setTvQuestion(TextView tvQuestion) {
+            this.tvQuestion = tvQuestion;
+        }
+
+        public EditText getEtAnswer() {
+            return etAnswer;
+        }
+
+        public void setEtAnswer(EditText etAnswer) {
+            this.etAnswer = etAnswer;
         }
     }
 }

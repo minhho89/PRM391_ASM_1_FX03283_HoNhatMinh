@@ -58,6 +58,9 @@ public abstract class Quiz {
      * @return true if userAnswers matches the correct answers set.
      */
     public boolean checkResult(Set<String> userAnswers) {
-        return mAnswers.equals(userAnswers);
+        if (!userAnswers.isEmpty() || userAnswers!=null) {
+            return mAnswers.equals(userAnswers);
+        }
+        return false;
     }
 }

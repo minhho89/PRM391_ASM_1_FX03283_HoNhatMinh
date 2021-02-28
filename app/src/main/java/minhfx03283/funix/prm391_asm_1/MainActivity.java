@@ -162,11 +162,11 @@ public class MainActivity extends AppCompatActivity {
         quizzes.add(q9);
         quizzes.add(q10);
 
-        quizzes.add(q1);
-        quizzes.add(q2);
-        quizzes.add(q3);
-        quizzes.add(q4);
-        quizzes.add(q5);
+//        quizzes.add(q1);
+//        quizzes.add(q2);
+//        quizzes.add(q3);
+//        quizzes.add(q4);
+//        quizzes.add(q5);
 
 
         return quizzes;

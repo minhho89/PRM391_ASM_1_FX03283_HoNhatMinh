@@ -7,6 +7,7 @@ public class QuizRecyclerViewType {
     public static final int LAYOUT_1 = 0;
     public static final int LAYOUT_2 = 1;
     public static final int LAYOUT_3 = 2;
+    public static final int LAYOUT_BUTTON = 3;
 
     private int viewType;
 

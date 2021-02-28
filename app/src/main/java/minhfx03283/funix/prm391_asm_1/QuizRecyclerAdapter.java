@@ -1,13 +1,12 @@
 package minhfx03283.funix.prm391_asm_1;
 
 import android.content.Context;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -36,9 +35,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     // List of quizzes to feed data
     List<Quiz> quizzes;
     // List of viewTypes
-    private List<QuizRecyclerViewType> viewTypes;
-    private HashMap<Integer, UserAnswer> userAnswerHashMap; // to store user answers
-    private HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
+    private final List<QuizRecyclerViewType> viewTypes;
+    private final HashMap<Integer, UserAnswer> userAnswerHashMap; // to store user answers
+    private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
+    private final HashMap<Integer, Set<String>> checkBoxCheckedHshMap = new HashMap<>(); // to store checked CheckedBoxes
 
     public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes, List<Quiz> quizzes) {
         this.context = context;
@@ -86,7 +86,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         final String TAG = "Quizzes iterator: ";
 
 
-
         // If position == quizzes.size() then button added
         if (position < quizzes.size()) {
             Quiz quiz = quizzes.get(position);
@@ -94,61 +93,83 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
             if (quiz instanceof QuizType1) {
                 // Views of Type 1 quiz
-                if (quiz instanceof QuizType1) {
 
-                    ViewHolderType1 holderType1 = (ViewHolderType1) holder;
-                    QuizType1 quizType1 = (QuizType1) quiz;
-                    holderType1.setTvQuestion(numberOrder + quizType1.getQuiz());
 
-                    holderType1.removeDuplicate(holderType1.getRdOptions());
+                ViewHolderType1 holderType1 = (ViewHolderType1) holder;
+                QuizType1 quizType1 = (QuizType1) quiz;
+                holderType1.setTvQuestion(numberOrder + quizType1.getQuiz());
 
-                    // Add radioButtons
+                holderType1.removeDuplicate(holderType1.getRdOptions());
 
-                    for (String s : quizType1.getOptionList()) {
-                        RadioButton rb = new RadioButton(
-                                holderType1.getLinearLayout().getContext());
-                        rb.setText(s);
-                        holderType1.getRdOptions().addView(rb);
+                // Add radioButtons
 
-                        // Load radioButton checked state
-                        loadRadioButtonCheckedState(quiz, rb);
+                for (String s : quizType1.getOptionList()) {
+                    RadioButton rb = new RadioButton(
+                            holderType1.getLinearLayout().getContext());
+                    rb.setText(s);
+                    holderType1.getRdOptions().addView(rb);
 
-                        // Set Listener
-                        rb.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                boolean isChecked = rb.isChecked();
-                                // Save answer to userAnswer
-                                if (isChecked) {
-                                    saveAnswerType1(userAnswerHashMap,
-                                            rb.getText().toString(), quiz.getId());
-                                    // Save state of selection
-                                    radioBtnCheckedHshMap.put(quiz.getId(),
-                                            rb.getText().toString());
-                                }
+                    // Load radioButton checked state
+                    loadRadioButtonCheckedState(quiz, rb);
+
+                    // Set Listener
+                    rb.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            boolean isChecked = rb.isChecked();
+                            // Save answer to userAnswer
+                            if (isChecked) {
+                                saveAnswerType1(userAnswerHashMap,
+                                        rb.getText().toString(), quiz.getId());
+                                // Save state of selection
+                                radioBtnCheckedHshMap.put(quiz.getId(),
+                                        rb.getText().toString());
                             }
-                        });
-                    }
+                        }
+                    });
 
                 }
             }
 
             if (quiz instanceof QuizType2) {
                 // Views of Type 2 quiz
-                if (quiz instanceof QuizType2) {
-                    ViewHolderType2 holderType2 = (ViewHolderType2) holder;
-                    QuizType2 quizType2 = (QuizType2) quiz;
-                    holderType2.setTvQuestion(numberOrder + quizType2.getQuiz());
 
-                    // Remove checkboxes from duplicating
-                    holderType2.removeDuplicate(holderType2.getLinearLayoutCheckBoxes());
+                ViewHolderType2 holderType2 = (ViewHolderType2) holder;
+                QuizType2 quizType2 = (QuizType2) quiz;
+                holderType2.setTvQuestion(numberOrder + quizType2.getQuiz());
 
-                    for (String s : quizType2.getOptionList()) {
-                        CheckBox cb = new CheckBox(
-                                holderType2.getLinearLayout().getContext());
-                        cb.setText(s);
-                        holderType2.getLinearLayout().addView(cb);
-                    }
+                // Remove checkboxes from duplicating
+                holderType2.removeDuplicate(holderType2.getLinearLayoutCheckBoxes());
+
+                for (String s : quizType2.getOptionList()) {
+                    CheckBox cb = new CheckBox(
+                            holderType2.getLinearLayout().getContext());
+                    cb.setText(s);
+                    holderType2.getLinearLayout().addView(cb);
+
+                    loadCheckBoxCheckedStated(quiz, cb);
+
+                    cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        final Set<String> checkedStringSet = new HashSet<>();
+
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            // Load checked state
+                            loadCheckBoxCheckedStated(quiz, cb);
+                            String buttonText = cb.getText().toString();
+                            if (isChecked) {
+                                // Save user choices to HashMap
+                                userAnswerHashMap.get(quiz.getId()).getAnswers()
+                                        .add(buttonText);
+
+                            } else {
+                                // Remove choices from HashMap
+                                userAnswerHashMap.get(quiz.getId()).getAnswers()
+                                        .remove(buttonText);
+                                cb.setChecked(false);
+                            }
+                        }
+                    });
                 }
             }
 
@@ -161,21 +182,34 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     }
 
+    private void loadCheckBoxCheckedStated(Quiz quiz, CheckBox cb) {
+        if (quiz instanceof QuizType2 &&
+                userAnswerHashMap.get(quiz.getId()).getAnswers() != null) {
+            for (String s : userAnswerHashMap.get(quiz.getId()).getAnswers()) {
+                if (s.equalsIgnoreCase(cb.getText().toString())) {
+                    cb.setChecked(true);
+                }
+            }
+
+        }
+    }
+
     /**
      * For QuizType 1, to load the checked state of a radioButton
+     *
      * @param quiz
      * @param rb
      */
     private void loadRadioButtonCheckedState(Quiz quiz, RadioButton rb) {
-
-            if (quiz instanceof QuizType1 &&
-                    radioBtnCheckedHshMap.get(quiz.getId()) == rb.getText().toString()){
-                rb.setChecked(true);
+        if (quiz instanceof QuizType1 &&
+                radioBtnCheckedHshMap.get(quiz.getId()) == rb.getText().toString()) {
+            rb.setChecked(true);
         }
     }
 
     /**
      * Saves user answers to HashMap (dataset) of Type 1 quiz
+     *
      * @param userAnswerHashMap
      */
     private void saveAnswerType1(HashMap<Integer, UserAnswer> userAnswerHashMap,
@@ -199,7 +233,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             if (quizzes.get(position) instanceof QuizType1) return LAYOUT_1;
             if (quizzes.get(position) instanceof QuizType2) return LAYOUT_2;
             if (quizzes.get(position) instanceof QuizType3) return LAYOUT_3;
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             return LAYOUT_BUTTON;
         }
         return LAYOUT_BUTTON;
@@ -250,6 +284,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         /**
          * Dynamically added Views duplicate every time onBindViewHolder got invoked.
          * This method removes the duplicates view, in this case, radioButtons.
+         *
          * @param radioGroup the Recycler View's radioGroup
          */
         public void removeDuplicate(RadioGroup radioGroup) {
@@ -301,6 +336,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         /**
          * Dynamically added Views duplicate every time onBindViewHolder got invoked.
          * This method removes the duplicates view, in this case, Checkboxes.
+         *
          * @param layoutCheckBoxes ViewHolder's linearLayout that holds checkBox items.
          */
         public void removeDuplicate(LinearLayout layoutCheckBoxes) {
@@ -352,15 +388,16 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             this.etAnswer = etAnswer;
         }
     }
+
     public class ViewHolderButton extends RecyclerView.ViewHolder {
         private LinearLayout linearLayout;
         private Button button;
 
         public ViewHolderButton(@NonNull View itemView) {
             super(itemView);
-            this.linearLayout = (LinearLayout)itemView.findViewById(R.id.linear_layout_button);
-            this.button = (Button)itemView.findViewById(R.id.btn_submit);
-            
+            this.linearLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_button);
+            this.button = (Button) itemView.findViewById(R.id.btn_submit);
+
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -375,13 +412,14 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
         /**
          * Evaluate all the user answers at once
+         *
          * @param quiz
          * @param userAnswerHashMap
          */
         private void evaluateResult(Quiz quiz,
                                     HashMap<Integer, UserAnswer> userAnswerHashMap) {
             UserAnswer userAnswer = userAnswerHashMap.get(quiz.getId());
-            if(!(quiz instanceof QuizType3)) {
+            if (!(quiz instanceof QuizType3)) {
                 userAnswer.setResult(quiz.checkResult(userAnswer.getAnswers()));
             } else {
                 // QuizType3
@@ -397,9 +435,9 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
         private int calculateScore(HashMap<Integer, UserAnswer> userAnswerHashMap) {
             int count = 0;
-            for(Map.Entry m : userAnswerHashMap.entrySet()) {
-                UserAnswer userAnswer = (UserAnswer)m.getValue();
-                if(userAnswer.isResult()) count++;
+            for (Map.Entry m : userAnswerHashMap.entrySet()) {
+                UserAnswer userAnswer = (UserAnswer) m.getValue();
+                if (userAnswer.isResult()) count++;
             }
             return count;
         }

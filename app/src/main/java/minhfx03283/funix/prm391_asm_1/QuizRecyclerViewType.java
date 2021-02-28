@@ -9,17 +9,11 @@ public class QuizRecyclerViewType {
     public static final int LAYOUT_3 = 2;
 
     private int viewType;
-    // Elements of quizzes
-    private String question;
 
     public QuizRecyclerViewType(int viewType) {
         this.viewType = viewType;
     }
 
-    public QuizRecyclerViewType(int viewType, String question) {
-        this.viewType = viewType;
-        this.question = question;
-    }
 
     public static int getLayout1() {
         return LAYOUT_1;

@@ -21,19 +21,16 @@ import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_1;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_2;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_3;
 
-public class QuizRecyclerAdapter extends RecyclerView.Adapter {
+public class QuizRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
     // List of quizzes to feed data
     List<Quiz> quizzes;
     // List of viewTypes
     private List<QuizRecyclerViewType> viewTypes;
 
-    public QuizRecyclerAdapter(List<QuizRecyclerViewType> viewTypes) {
-        this.viewTypes = viewTypes;
-    }
-
-    public QuizRecyclerAdapter(Context context, List<Quiz> quizzes) {
+    public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes, List<Quiz> quizzes) {
         this.context = context;
+        this.viewTypes = viewTypes;
         this.quizzes = quizzes;
     }
 
@@ -65,20 +62,19 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Quiz quiz = quizzes.get(position);
 
-        // Views of Type 1 quiz
-        if (quiz instanceof QuizType1) {
-            position = 0;
-            ViewHolderType1 holderType1 = (ViewHolderType1) holder;
-            QuizType1 type1Quiz = (QuizType1)quiz;
-            for (String s : type1Quiz.getOptionList()) {
-                RadioButton rb = new RadioButton(holderType1.getLinearLayout().getContext());
-                rb.setText(s);
-            }
-        }
         switch (viewTypes.get(position).getViewType()) {
 
             case LAYOUT_1:
-
+            // Views of Type 1 quiz
+                if (quiz instanceof QuizType1) {
+                    position = 0;
+                    ViewHolderType1 holderType1 = (ViewHolderType1) holder;
+                    QuizType1 type1Quiz = (QuizType1)quiz;
+                    for (String s : type1Quiz.getOptionList()) {
+                        RadioButton rb = new RadioButton(holderType1.getLinearLayout().getContext());
+                        rb.setText(s);
+                    }
+                }
 
                 break;
             case LAYOUT_2:
@@ -96,16 +92,16 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        switch (viewTypes.get(position).getViewType()) {
-            case 0:
-                return LAYOUT_1;
-            case 1:
-                return LAYOUT_2;
-            case 3:
-                return LAYOUT_3;
-            default:
-                return -1;
-        }
+            switch (viewTypes.get(position).getViewType()) {
+                case 0:
+                    return LAYOUT_1;
+                case 1:
+                    return LAYOUT_2;
+                case 3:
+                    return LAYOUT_3;
+                default:
+                    return -1;
+            }
     }
 
     public class ViewHolderType1 extends RecyclerView.ViewHolder {

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,12 +22,21 @@ public class MainActivity extends AppCompatActivity {
 
         List<Quiz> quizzes = addQuizzesInstance();
 
+        // Get reference to RecyclerView
         RecyclerView rvQuiz = (RecyclerView) findViewById(R.id.recycler_view);
+        //  Create and set the layout manager for RecyclerView
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvQuiz.setLayoutManager(layoutManager);
 
-        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, quizzes);
+        List<QuizRecyclerViewType> viewTypeLists = new ArrayList<>();
+
+        // Pass the arguments
+        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_1));
+        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2));
+        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3));
+
+        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists, quizzes);
         rvQuiz.setAdapter(adapter);
-        rvQuiz.setLayoutManager(new LinearLayoutManager(this));
-
 
     }
 

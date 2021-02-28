@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_1;
@@ -35,12 +38,19 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     // List of viewTypes
     private List<QuizRecyclerViewType> viewTypes;
     private HashMap<Integer, UserAnswer> userAnswerHashMap; // to store user answers
+    private HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
 
     public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes, List<Quiz> quizzes) {
         this.context = context;
         this.viewTypes = viewTypes;
         this.quizzes = quizzes;
         userAnswerHashMap = new HashMap<>();
+
+        // Initialize all of UserAnswers relative to quizzes
+        for (Quiz q : quizzes) {
+            Set<String> emptySet = new HashSet<>();
+            userAnswerHashMap.put(q.getId(), new UserAnswer(q.getId(), emptySet));
+        }
     }
 
     // Creates new ViewHolders (invoked by the layout manager)
@@ -74,7 +84,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final String TAG = "Quizzes iterator: ";
-        Log.d(TAG, "onBindViewHolder: " + userAnswerHashMap.toString());
+
 
 
         // If position == quizzes.size() then button added
@@ -100,13 +110,22 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                         rb.setText(s);
                         holderType1.getRdOptions().addView(rb);
 
+                        // Load radioButton checked state
+                        loadRadioButtonCheckedState(quiz, rb);
+
                         // Set Listener
                         rb.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // TODO: save answer to dataset
-                                saveAnswerType1(userAnswerHashMap,
-                                        rb.getText().toString(), quiz.getId());
+                                boolean isChecked = rb.isChecked();
+                                // Save answer to userAnswer
+                                if (isChecked) {
+                                    saveAnswerType1(userAnswerHashMap,
+                                            rb.getText().toString(), quiz.getId());
+                                    // Save state of selection
+                                    radioBtnCheckedHshMap.put(quiz.getId(),
+                                            rb.getText().toString());
+                                }
                             }
                         });
                     }
@@ -140,7 +159,19 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             }
         }
 
-        // Add button when reach to the view's end
+    }
+
+    /**
+     * For QuizType 1, to load the checked state of a radioButton
+     * @param quiz
+     * @param rb
+     */
+    private void loadRadioButtonCheckedState(Quiz quiz, RadioButton rb) {
+
+            if (quiz instanceof QuizType1 &&
+                    radioBtnCheckedHshMap.get(quiz.getId()) == rb.getText().toString()){
+                rb.setChecked(true);
+        }
     }
 
     /**
@@ -151,6 +182,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                                  String answer, int quizId) {
         UserAnswer userAnswer = new UserAnswer();
         Set<String> answers = new HashSet<String>(Arrays.asList(answer));
+        userAnswer.setQuizId(quizId);
         userAnswer.setAnswers(answers);
         this.userAnswerHashMap.put(quizId, userAnswer);
     }
@@ -328,6 +360,48 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             super(itemView);
             this.linearLayout = (LinearLayout)itemView.findViewById(R.id.linear_layout_button);
             this.button = (Button)itemView.findViewById(R.id.btn_submit);
+            
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (Quiz q : quizzes) {
+                        evaluateResult(q, userAnswerHashMap);
+                    }
+                    int score = calculateScore(userAnswerHashMap);
+                    Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        /**
+         * Evaluate all the user answers at once
+         * @param quiz
+         * @param userAnswerHashMap
+         */
+        private void evaluateResult(Quiz quiz,
+                                    HashMap<Integer, UserAnswer> userAnswerHashMap) {
+            UserAnswer userAnswer = userAnswerHashMap.get(quiz.getId());
+            if(!(quiz instanceof QuizType3)) {
+                userAnswer.setResult(quiz.checkResult(userAnswer.getAnswers()));
+            } else {
+                // QuizType3
+                String s = "";
+                Iterator it = userAnswer.getAnswers().iterator();
+                while (it.hasNext()) {
+                    s = it.next().toString();
+                    userAnswer.setResult(((QuizType3) quiz).checkResult(s));
+                }
+
+            }
+        }
+
+        private int calculateScore(HashMap<Integer, UserAnswer> userAnswerHashMap) {
+            int count = 0;
+            for(Map.Entry m : userAnswerHashMap.entrySet()) {
+                UserAnswer userAnswer = (UserAnswer)m.getValue();
+                if(userAnswer.isResult()) count++;
+            }
+            return count;
         }
 
         public LinearLayout getLinearLayout() {

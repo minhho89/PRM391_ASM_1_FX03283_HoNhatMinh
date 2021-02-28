@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,6 +22,7 @@ import java.util.List;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_1;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_2;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_3;
+import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_BUTTON;
 
 public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     Context context;
@@ -53,6 +55,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 View layout3 = LayoutInflater.from(context)
                         .inflate(R.layout.quiz_type_3, parent, false);
                 return new ViewHolderType3(layout3);
+            case LAYOUT_BUTTON:
+                View layoutButton = LayoutInflater.from(context)
+                        .inflate(R.layout.button_recycler, parent, false);
+                return new ViewHolderButton(layoutButton);
             default:
                 return null;
         }
@@ -62,66 +68,76 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final String TAG = "Quizzes iterator: ";
-        Quiz quiz = quizzes.get(position);
-        String numberOrder = position + 1 + ". ";
 
-        if (quiz instanceof QuizType1) {
-            // Views of Type 1 quiz
+        // If position == quizzes.size() then button added
+        if (position < quizzes.size()) {
+            Quiz quiz = quizzes.get(position);
+            String numberOrder = position + 1 + ". ";
+
             if (quiz instanceof QuizType1) {
+                // Views of Type 1 quiz
+                if (quiz instanceof QuizType1) {
 
-                ViewHolderType1 holderType1 = (ViewHolderType1) holder;
-                QuizType1 quizType1 = (QuizType1) quiz;
-                holderType1.setTvQuestion(numberOrder + quizType1.getQuiz());
+                    ViewHolderType1 holderType1 = (ViewHolderType1) holder;
+                    QuizType1 quizType1 = (QuizType1) quiz;
+                    holderType1.setTvQuestion(numberOrder + quizType1.getQuiz());
 
-                holderType1.removeDuplicate(holderType1.getRdOptions());
+                    holderType1.removeDuplicate(holderType1.getRdOptions());
 
-                for (String s : quizType1.getOptionList()) {
-                    RadioButton rb = new RadioButton(
-                            holderType1.getLinearLayout().getContext());
-                    rb.setText(s);
-                    holderType1.getRdOptions().addView(rb);
+                    for (String s : quizType1.getOptionList()) {
+                        RadioButton rb = new RadioButton(
+                                holderType1.getLinearLayout().getContext());
+                        rb.setText(s);
+                        holderType1.getRdOptions().addView(rb);
+                    }
                 }
             }
-        }
 
-        if (quiz instanceof QuizType2) {
-            // Views of Type 2 quiz
             if (quiz instanceof QuizType2) {
-                ViewHolderType2 holderType2 = (ViewHolderType2) holder;
-                QuizType2 quizType2 = (QuizType2) quiz;
-                holderType2.setTvQuestion(numberOrder + quizType2.getQuiz());
+                // Views of Type 2 quiz
+                if (quiz instanceof QuizType2) {
+                    ViewHolderType2 holderType2 = (ViewHolderType2) holder;
+                    QuizType2 quizType2 = (QuizType2) quiz;
+                    holderType2.setTvQuestion(numberOrder + quizType2.getQuiz());
 
-                // Remove checkboxes from duplicating
-                holderType2.removeDuplicate(holderType2.getLinearLayoutCheckBoxes());
+                    // Remove checkboxes from duplicating
+                    holderType2.removeDuplicate(holderType2.getLinearLayoutCheckBoxes());
 
-                for (String s : quizType2.getOptionList()) {
-                    CheckBox cb = new CheckBox(
-                            holderType2.getLinearLayout().getContext());
-                    cb.setText(s);
-                    holderType2.getLinearLayout().addView(cb);
+                    for (String s : quizType2.getOptionList()) {
+                        CheckBox cb = new CheckBox(
+                                holderType2.getLinearLayout().getContext());
+                        cb.setText(s);
+                        holderType2.getLinearLayout().addView(cb);
+                    }
                 }
+            }
+
+            if (quiz instanceof QuizType3) {
+                ViewHolderType3 holderType3 = (ViewHolderType3) holder;
+                QuizType3 quizType3 = (QuizType3) quiz;
+                holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());
             }
         }
 
-        if (quiz instanceof QuizType3) {
-            ViewHolderType3 holderType3 = (ViewHolderType3) holder;
-            QuizType3 quizType3 = (QuizType3) quiz;
-            holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());
-        }
-
+        // Add button when reach to the view's end
     }
 
     @Override
     public int getItemCount() {
-        return quizzes.size();
+        return quizzes.size() + 1;
     }
 
 
     @Override
     public int getItemViewType(int position) {
-        if (quizzes.get(position) instanceof QuizType1) return LAYOUT_1;
-        if (quizzes.get(position) instanceof QuizType2) return LAYOUT_2;
-        return LAYOUT_3;
+        try {
+            if (quizzes.get(position) instanceof QuizType1) return LAYOUT_1;
+            if (quizzes.get(position) instanceof QuizType2) return LAYOUT_2;
+            if (quizzes.get(position) instanceof QuizType3) return LAYOUT_3;
+        } catch (IndexOutOfBoundsException e){
+            return LAYOUT_BUTTON;
+        }
+        return LAYOUT_BUTTON;
     }
 
     public class ViewHolderType1 extends RecyclerView.ViewHolder {
@@ -269,6 +285,32 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
         public void setEtAnswer(EditText etAnswer) {
             this.etAnswer = etAnswer;
+        }
+    }
+    public class ViewHolderButton extends RecyclerView.ViewHolder {
+        private LinearLayout linearLayout;
+        private Button button;
+
+        public ViewHolderButton(@NonNull View itemView) {
+            super(itemView);
+            this.linearLayout = (LinearLayout)itemView.findViewById(R.id.linear_layout_button);
+            this.button = (Button)itemView.findViewById(R.id.btn_submit);
+        }
+
+        public LinearLayout getLinearLayout() {
+            return linearLayout;
+        }
+
+        public void setLinearLayout(LinearLayout linearLayout) {
+            this.linearLayout = linearLayout;
+        }
+
+        public Button getButton() {
+            return button;
+        }
+
+        public void setButton(Button button) {
+            this.button = button;
         }
     }
 }

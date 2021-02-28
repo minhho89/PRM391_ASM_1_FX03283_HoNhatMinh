@@ -1,6 +1,8 @@
 package minhfx03283.funix.prm391_asm_1;
 
 import android.content.Context;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,13 +63,17 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final String TAG = "Quizzes iterator: ";
         Quiz quiz = quizzes.get(position);
+        String numberOrder = position + 1 + ". ";
 
         if (quiz instanceof QuizType1) {
             // Views of Type 1 quiz
             if (quiz instanceof QuizType1) {
+
                 ViewHolderType1 holderType1 = (ViewHolderType1) holder;
                 QuizType1 quizType1 = (QuizType1) quiz;
-                holderType1.setTvQuestion(quizType1.getQuiz());
+                holderType1.setTvQuestion(numberOrder + quizType1.getQuiz());
+
+                holderType1.removeDuplicate(holderType1.getRdOptions());
 
                 for (String s : quizType1.getOptionList()) {
                     RadioButton rb = new RadioButton(
@@ -83,7 +89,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             if (quiz instanceof QuizType2) {
                 ViewHolderType2 holderType2 = (ViewHolderType2) holder;
                 QuizType2 quizType2 = (QuizType2) quiz;
-                holderType2.setTvQuestion(quizType2.getQuiz());
+                holderType2.setTvQuestion(numberOrder + quizType2.getQuiz());
+
+                // Remove checkboxes from duplicating
+                holderType2.removeDuplicate(holderType2.getLinearLayoutCheckBoxes());
 
                 for (String s : quizType2.getOptionList()) {
                     CheckBox cb = new CheckBox(
@@ -97,7 +106,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         if (quiz instanceof QuizType3) {
             ViewHolderType3 holderType3 = (ViewHolderType3) holder;
             QuizType3 quizType3 = (QuizType3) quiz;
-            holderType3.setTvQuestion(quizType3.getQuiz());
+            holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());
         }
 
     }
@@ -156,17 +165,29 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         public void setLinearLayout(LinearLayout linearLayout) {
             this.linearLayout = linearLayout;
         }
+
+        /**
+         * Dynamically added Views duplicate every time onBindViewHolder got invoked.
+         * This method removes the duplicates view, in this case, radioButtons.
+         * @param radioGroup the Recycler View's radioGroup
+         */
+        public void removeDuplicate(RadioGroup radioGroup) {
+            radioGroup.removeAllViews();
+        }
     }
 
     public class ViewHolderType2 extends RecyclerView.ViewHolder {
         private LinearLayout linearLayout;
+        private LinearLayout linearLayoutCheckBoxes;
         private TextView tvQuestion;
 
         public ViewHolderType2(@NonNull View itemView) {
             super(itemView);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_type_2);
+            linearLayoutCheckBoxes = (LinearLayout) itemView.findViewById(R.id.linear_layout_type_2);
             tvQuestion = (TextView) itemView.findViewById(R.id.tv_question);
         }
+
 
         public LinearLayout getLinearLayout() {
             return linearLayout;
@@ -174,6 +195,14 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
         public void setLinearLayout(LinearLayout linearLayout) {
             this.linearLayout = linearLayout;
+        }
+
+        public LinearLayout getLinearLayoutCheckBoxes() {
+            return linearLayoutCheckBoxes;
+        }
+
+        public void setLinearLayoutCheckBoxes(LinearLayout linearLayoutCheckBoxes) {
+            this.linearLayoutCheckBoxes = linearLayoutCheckBoxes;
         }
 
         public TextView getTvQuestion() {
@@ -186,6 +215,15 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
         public void setTvQuestion(TextView tvQuestion) {
             this.tvQuestion = tvQuestion;
+        }
+
+        /**
+         * Dynamically added Views duplicate every time onBindViewHolder got invoked.
+         * This method removes the duplicates view, in this case, Checkboxes.
+         * @param layoutCheckBoxes ViewHolder's linearLayout that holds checkBox items.
+         */
+        public void removeDuplicate(LinearLayout layoutCheckBoxes) {
+            layoutCheckBoxes.removeAllViews();
         }
     }
 

@@ -204,7 +204,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                         userAnswerHashMap.put(quiz.getId(), userAnswer);
                     }
                 });
-//
             }
         }
 

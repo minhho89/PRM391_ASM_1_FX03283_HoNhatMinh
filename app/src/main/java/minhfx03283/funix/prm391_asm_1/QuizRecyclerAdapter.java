@@ -177,13 +177,57 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 ViewHolderType3 holderType3 = (ViewHolderType3) holder;
                 QuizType3 quizType3 = (QuizType3) quiz;
                 holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());
+                EditText etAnswer = ((ViewHolderType3) holder).etAnswer;
 
-                
+                // Load editText contents
+                loadEditTextContents(quiz, etAnswer);
+
+                etAnswer.setOnFocusChangeListener(
+                        new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        UserAnswer userAnswer = new UserAnswer();
+                        Set<String> answerSet = new HashSet<>();
+                        userAnswer.setQuizId(quiz.getId());
+                        if(!hasFocus) {
+                            // If user leave the editText, the result added to answerSet
+                            answerSet.add(etAnswer.getText().toString());
+                        } else {
+                            // Clear for next record
+                            answerSet.clear();
+                        }
+                        // Add answerSet to userAnswer
+                        userAnswer.setAnswers(answerSet);
+                        // Add userAnswer to HashMap
+                        userAnswerHashMap.put(quiz.getId(), userAnswer);
+                    }
+                });
+
             }
         }
 
     }
 
+    /**
+     * For QuizType 3, loads the contents of EditText that user have already entered.
+     * @param quiz current quiz
+     * @param etAnswer current EditText
+     */
+    private void loadEditTextContents(Quiz quiz, EditText etAnswer) {
+        if (userAnswerHashMap.get(quiz.getId()) != null
+                && userAnswerHashMap.get(quiz.getId()).getAnswers() != null
+                && !userAnswerHashMap.get(quiz.getId()).getAnswers().isEmpty()) {
+            Iterator it = userAnswerHashMap.get(quiz.getId()).getAnswers().iterator();
+            // Since QuizType 3, user answers set just hold 1 item of String
+            etAnswer.setText(it.next().toString());
+        }
+    }
+
+    /**
+     * For QuizType 2, loads the CheckBoxes state that user have already ticked.
+     * @param quiz current quiz
+     * @param cb current checkBox
+     */
     private void loadCheckBoxCheckedStated(Quiz quiz, CheckBox cb) {
         if (quiz instanceof QuizType2 &&
                 userAnswerHashMap.get(quiz.getId()).getAnswers() != null) {
@@ -197,10 +241,9 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * For QuizType 1, to load the checked state of a radioButton
-     *
-     * @param quiz
-     * @param rb
+     * For QuizType 1, loads the checked state of a radioButton that user already checked.
+     * @param quiz current quiz
+     * @param rb current checkbox
      */
     private void loadRadioButtonCheckedState(Quiz quiz, RadioButton rb) {
         if (quiz instanceof QuizType1 &&
@@ -403,18 +446,41 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    for (Quiz q : quizzes) {
-                        evaluateResult(q, userAnswerHashMap);
-                    }
-                    int score = calculateScore(userAnswerHashMap);
-                    Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
+                    submitButtonClicked();
                 }
             });
         }
 
         /**
-         * Evaluate all the user answers at once
-         *
+         * Handles activity when Submit button got clicked.
+         */
+        private void submitButtonClicked() {
+            // Calculates score and displays by Toast
+            for (Quiz q : quizzes) {
+                evaluateResult(q, userAnswerHashMap);
+            }
+            int score = calculateScore(userAnswerHashMap);
+            Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
+
+            // Handles last editText View in case of user clicks button without leaving it.
+            // First checks if the last view is a editText or not
+            // TODO:  checks if the last view is a editText or not
+            if(isLastViewEditText(quizzes)) {
+                // Then save the answer to HashMap
+                UserAnswer userAnswer = new UserAnswer();
+                // TODO: adds userAnswer in editText to HashMap
+            }
+
+        }
+
+        private boolean isLastViewEditText(List<Quiz> quizzes) {
+            int lastViewPosition = quizzes.size() - 1;
+            return (quizzes.get(lastViewPosition) instanceof QuizType3);
+
+        }
+
+        /**
+         * Evaluates all the user answers at once.
          * @param quiz
          * @param userAnswerHashMap
          */
@@ -435,6 +501,11 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             }
         }
 
+        /**
+         * Counts the total correct answers.
+         * @param userAnswerHashMap
+         * @return
+         */
         private int calculateScore(HashMap<Integer, UserAnswer> userAnswerHashMap) {
             int count = 0;
             for (Map.Entry m : userAnswerHashMap.entrySet()) {
@@ -459,5 +530,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         public void setButton(Button button) {
             this.button = button;
         }
+
     }
+
+
 }

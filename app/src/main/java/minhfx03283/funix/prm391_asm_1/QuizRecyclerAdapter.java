@@ -1,6 +1,7 @@
 package minhfx03283.funix.prm391_asm_1;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.Inflater;
 
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_1;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_2;
@@ -455,6 +457,22 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
          * Handles activity when Submit button got clicked.
          */
         private void submitButtonClicked() {
+            View view = (View)LayoutInflater.from(context).inflate(R.layout.quiz_type_3, null);
+            EditText etAnswer = (EditText)view.findViewById(R.id.et_user_answer);
+
+            // Handles last editText View in case of user clicks button without leaving it.
+            // First checks if the last view is a editText or not
+            // TODO:  checks if the last view is a editText or not
+            if(isLastViewEditText(quizzes)) {
+                // Then save the answer to HashMap
+//                UserAnswer userAnswer = new UserAnswer();
+//                userAnswer.setQuizId(quizzes.get(quizzes.size()-1).getId());
+//                userAnswer.setAnswers(new HashSet<>(Arrays.asList(etAnswer.getText().toString())));
+//                // TODO: adds userAnswer in editText to HashMap
+//                userAnswerHashMap.put(userAnswer.getQuizId(), userAnswer);
+                Log.d("Button*****", "submitButtonClicked: " + userAnswerHashMap.toString());
+            }
+
             // Calculates score and displays by Toast
             for (Quiz q : quizzes) {
                 evaluateResult(q, userAnswerHashMap);
@@ -462,14 +480,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             int score = calculateScore(userAnswerHashMap);
             Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
 
-            // Handles last editText View in case of user clicks button without leaving it.
-            // First checks if the last view is a editText or not
-            // TODO:  checks if the last view is a editText or not
-            if(isLastViewEditText(quizzes)) {
-                // Then save the answer to HashMap
-                UserAnswer userAnswer = new UserAnswer();
-                // TODO: adds userAnswer in editText to HashMap
-            }
 
         }
 

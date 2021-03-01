@@ -20,6 +20,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
 
     private List<Quiz> quizzes;
     Context context;
+    View view;
 
     public QuizAdapter(List<Quiz> quizzes, Context context) {
         this.quizzes = quizzes;
@@ -34,6 +35,11 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(hasStableIds);
     }
 
     /**
@@ -55,6 +61,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
                 .inflate(R.layout.quiz_item, parent, false);
 
         return new ViewHolder(view);
+
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -64,7 +71,7 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
         String positionNo = position + 1 + ". ";
         LinearLayout lnl = holder.lnl;
 
-
+        holder.setIsRecyclable(false);
 
         // Add textView for question
         TextView tv = new TextView(lnl.getContext());

@@ -39,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
 //        rvQuiz.setAdapter(adapter);
 
         QuizAdapter adapter = new QuizAdapter(quizzes, this);
+        adapter.setHasStableIds(true);
         rvQuiz.setAdapter(adapter);
+
 
     }
 

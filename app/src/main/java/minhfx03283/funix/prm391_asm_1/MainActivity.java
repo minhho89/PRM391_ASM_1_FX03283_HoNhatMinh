@@ -133,8 +133,7 @@ public class MainActivity extends AppCompatActivity {
         //8. Where in the human body would you find the scaphoid bone? (Correct Answer is "Wrist")
         QuizType3 q8 = new QuizType3();
         q8.setQuiz( getResources().getString(R.string.q8));
-        q8.setAnswers(new HashSet<String>(
-                Arrays.asList(getResources().getString(R.string.q8_ans))));
+        q8.setAnswers(new HashSet<String>(Arrays.asList(getResources().getString(R.string.q8_ans))));
 
         //9. Which grow upwards Stalactites or Stalagmites? (Correct Answers is #2 "Stalagmites")
         //Stalactites
@@ -161,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         quizzes.add(q8);
         quizzes.add(q9);
         quizzes.add(q10);
+
 
 //        quizzes.add(q1);
 //        quizzes.add(q2);

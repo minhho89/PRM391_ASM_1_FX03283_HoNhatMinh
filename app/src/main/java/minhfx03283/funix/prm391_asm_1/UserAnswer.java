@@ -44,6 +44,6 @@ public class UserAnswer {
     public String toString() {
         return "UserAnswer: " + "\n" +
                 "answers: " + mAnswers + "\n" +
-                "result: "  + mResult;
+                "result: "  + mResult + "\n";
     }
 }

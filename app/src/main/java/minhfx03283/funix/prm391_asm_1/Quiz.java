@@ -12,7 +12,7 @@ import java.util.Set;
 public abstract class Quiz {
     private static int mCount = 0;
     private int mId;
-    private String mQuiz;
+    private String mQuestion;
     private Set<String> mAnswers;
 
     // Auto generate Id number for everytime an instance created
@@ -28,12 +28,12 @@ public abstract class Quiz {
         this.mId = mId;
     }
 
-    public String getQuiz() {
-        return mQuiz;
+    public String getQuestion() {
+        return mQuestion;
     }
 
     public void setQuiz(String mQuiz) {
-        this.mQuiz = mQuiz;
+        this.mQuestion = mQuiz;
     }
 
     public Set<String> getAnswers() {
@@ -48,7 +48,7 @@ public abstract class Quiz {
     public String toString() {
         return "Quiz" + "\n" +
                 "mId: " + mId + "\n" +
-                "mQuiz: " + mQuiz + "\n" +
+                "mQuiz: " + mQuestion + "\n" +
                 "mAnswers: " + mAnswers;
     }
 

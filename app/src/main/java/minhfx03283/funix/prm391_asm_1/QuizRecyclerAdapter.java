@@ -99,7 +99,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 // Views of Type 1 quiz
                 ViewHolderType1 holderType1 = (ViewHolderType1) holder;
                 QuizType1 quizType1 = (QuizType1) quiz;
-                holderType1.setTvQuestion(numberOrder + quizType1.getQuiz());
+                holderType1.setTvQuestion(numberOrder + quizType1.getQuestion());
 
                 holderType1.removeDuplicate(holderType1.getRdOptions());
 
@@ -138,7 +138,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
                 ViewHolderType2 holderType2 = (ViewHolderType2) holder;
                 QuizType2 quizType2 = (QuizType2) quiz;
-                holderType2.setTvQuestion(numberOrder + quizType2.getQuiz());
+                holderType2.setTvQuestion(numberOrder + quizType2.getQuestion());
 
                 // Remove checkboxes from duplicating
                 holderType2.removeDuplicate(holderType2.getLinearLayoutCheckBoxes());
@@ -178,7 +178,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             if (quiz instanceof QuizType3) {
                 ViewHolderType3 holderType3 = (ViewHolderType3) holder;
                 QuizType3 quizType3 = (QuizType3) quiz;
-                holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());
+                holderType3.setTvQuestion(numberOrder + quizType3.getQuestion());
                 EditText etAnswer = ((ViewHolderType3) holder).etAnswer;
 
                 // Load editText contents

@@ -31,11 +31,14 @@ public class MainActivity extends AppCompatActivity {
         List<QuizRecyclerViewType> viewTypeLists = new ArrayList<>();
 
         // Pass the arguments
-        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_1));
-        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2));
-        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3));
+//        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_1));
+//        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2));
+//        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3));
+//
+//        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists, quizzes);
+//        rvQuiz.setAdapter(adapter);
 
-        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists, quizzes);
+        QuizAdapter adapter = new QuizAdapter(quizzes, this);
         rvQuiz.setAdapter(adapter);
 
     }

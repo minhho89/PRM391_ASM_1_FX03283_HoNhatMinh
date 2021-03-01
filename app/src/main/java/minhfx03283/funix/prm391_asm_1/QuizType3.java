@@ -26,7 +26,7 @@ public class QuizType3 extends Quiz{
     public String toString() {
         return "Quiz" + "\n" +
                 "mId: " + super.getId() + "\n" +
-                "mQuiz: " + super.getQuiz() + "\n" +
+                "mQuestion: " + super.getQuestion() + "\n" +
                 "mAnswers: " + mAnswers;
     }
 

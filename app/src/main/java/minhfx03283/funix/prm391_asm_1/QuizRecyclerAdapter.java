@@ -1,6 +1,8 @@
 package minhfx03283.funix.prm391_asm_1;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -85,8 +88,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     // Replace the content of views
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final String TAG = "Quizzes iterator: ";
-
+        final String TAG = "**Holder Load** ";
 
         // If position == quizzes.size() then button added
         if (position < quizzes.size()) {
@@ -95,8 +97,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
             if (quiz instanceof QuizType1) {
                 // Views of Type 1 quiz
-
-
                 ViewHolderType1 holderType1 = (ViewHolderType1) holder;
                 QuizType1 quizType1 = (QuizType1) quiz;
                 holderType1.setTvQuestion(numberOrder + quizType1.getQuiz());
@@ -184,27 +184,27 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 // Load editText contents
                 loadEditTextContents(quiz, etAnswer);
 
-                etAnswer.setOnFocusChangeListener(
-                        new View.OnFocusChangeListener() {
+                etAnswer.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void onFocusChange(View v, boolean hasFocus) {
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
                         UserAnswer userAnswer = new UserAnswer();
                         Set<String> answerSet = new HashSet<>();
                         userAnswer.setQuizId(quiz.getId());
-                        if(!hasFocus) {
-                            // If user leave the editText, the result added to answerSet
-                            answerSet.add(etAnswer.getText().toString());
-                        } else {
-                            // Clear for next record
-                            answerSet.clear();
-                        }
-                        // Add answerSet to userAnswer
+
+                        answerSet.add(etAnswer.getText().toString());
                         userAnswer.setAnswers(answerSet);
-                        // Add userAnswer to HashMap
                         userAnswerHashMap.put(quiz.getId(), userAnswer);
                     }
                 });
-
+//
             }
         }
 
@@ -273,6 +273,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         return quizzes.size() + 1;
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -401,6 +405,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_type_3);
             tvQuestion = (TextView) itemView.findViewById(R.id.tv_question);
             etAnswer = (EditText) itemView.findViewById(R.id.et_user_answer);
+
         }
 
         public LinearLayout getLinearLayout() {
@@ -470,7 +475,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 //                userAnswer.setAnswers(new HashSet<>(Arrays.asList(etAnswer.getText().toString())));
 //                // TODO: adds userAnswer in editText to HashMap
 //                userAnswerHashMap.put(userAnswer.getQuizId(), userAnswer);
-                Log.d("Button*****", "submitButtonClicked: " + userAnswerHashMap.toString());
             }
 
             // Calculates score and displays by Toast
@@ -478,6 +482,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 evaluateResult(q, userAnswerHashMap);
             }
             int score = calculateScore(userAnswerHashMap);
+            Log.d("button submit clicked", "submitButtonClicked: " + userAnswerHashMap.toString());
             Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
 
 
@@ -502,12 +507,13 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             } else {
                 // QuizType3
                 String s = "";
-                Iterator it = userAnswer.getAnswers().iterator();
-                while (it.hasNext()) {
-                    s = it.next().toString();
-                    userAnswer.setResult(((QuizType3) quiz).checkResult(s));
+                if(userAnswer.getAnswers()!=null) {
+                    Iterator it = userAnswer.getAnswers().iterator();
+                    while (it.hasNext()) {
+                        s = it.next().toString();
+                        userAnswer.setResult(((QuizType3) quiz).checkResult(s));
+                    }
                 }
-
             }
         }
 

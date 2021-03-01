@@ -4,7 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -58,12 +62,49 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Quiz quiz = quizzes.get(position);
         String positionNo = position + 1 + ". ";
-        LinearLayout lln = holder.lln;
+        LinearLayout lnl = holder.lnl;
 
-        TextView tv = new TextView(lln.getContext());
+
+
+        // Add textView for question
+        TextView tv = new TextView(lnl.getContext());
         tv.setText(positionNo + quiz.getQuestion());
+        lnl.addView(tv);
 
-        lln.addView(tv);
+        if (quiz instanceof QuizType1) {
+            // Add option lists to radioButton
+            RadioGroup rdGroup = new RadioGroup(lnl.getContext());
+            int padding = (int) context.getResources().getDimension(R.dimen.padding_element);
+            rdGroup.setPadding(0, padding, 0, 0);
+            for (String s : ((QuizType1) quiz).getOptionList()) {
+                RadioButton rb = new RadioButton(lnl.getContext());
+                rb.setText(s);
+                rb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+                rdGroup.addView(rb);
+            }
+            lnl.addView(rdGroup);
+        }
+
+        if (quiz instanceof QuizType2) {
+            for (String s : ((QuizType2) quiz).getOptionList()) {
+                CheckBox cb = new CheckBox(lnl.getContext());
+                cb.setText(positionNo + s);
+                lnl.addView(cb);
+            }
+        }
+
+        if (quiz instanceof QuizType3) {
+            EditText edt = new EditText(lnl.getContext());
+            edt.setHint("Your answer");
+            lnl.addView(edt);
+        }
+
+
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -73,10 +114,10 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout lln;
+        LinearLayout lnl;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            lln = (LinearLayout) itemView.findViewById(R.id.quiz_item_layout);
+            lnl = (LinearLayout) itemView.findViewById(R.id.quiz_item_layout);
         }
     }
 }

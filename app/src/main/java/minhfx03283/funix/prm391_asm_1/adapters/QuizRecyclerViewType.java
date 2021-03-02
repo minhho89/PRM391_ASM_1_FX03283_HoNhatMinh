@@ -1,4 +1,4 @@
-package minhfx03283.funix.prm391_asm_1;
+package minhfx03283.funix.prm391_asm_1.adapters;
 
 /**
  * Defines view type for Object ViewHolder for each question type

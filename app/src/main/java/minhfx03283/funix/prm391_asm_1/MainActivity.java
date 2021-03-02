@@ -5,13 +5,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerAdapter;
+import minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType;
+import minhfx03283.funix.prm391_asm_1.models.Quiz;
+import minhfx03283.funix.prm391_asm_1.models.QuizType1;
+import minhfx03283.funix.prm391_asm_1.models.QuizType2;
+import minhfx03283.funix.prm391_asm_1.models.QuizType3;
 
 public class MainActivity extends AppCompatActivity {
 

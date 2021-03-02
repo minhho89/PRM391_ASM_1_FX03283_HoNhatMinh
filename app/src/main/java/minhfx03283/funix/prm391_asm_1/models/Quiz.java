@@ -1,4 +1,4 @@
-package minhfx03283.funix.prm391_asm_1;
+package minhfx03283.funix.prm391_asm_1.models;
 
 import java.util.HashSet;
 import java.util.Set;

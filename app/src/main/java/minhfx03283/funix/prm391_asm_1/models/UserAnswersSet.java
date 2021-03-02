@@ -1,8 +1,13 @@
 package minhfx03283.funix.prm391_asm_1.models;
 
+import android.util.Log;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class UserAnswersSet {
     public HashMap<Integer, UserAnswer> userAnswersHashMap() {
@@ -62,19 +67,37 @@ public class UserAnswersSet {
      * @param quiz
      */
     public void evaluateResult(Quiz quiz) {
-        UserAnswer userAnswer = this.mUserAnswersHashMap.get(quiz.getId());
-        if (!(quiz instanceof QuizType3)) {
-            userAnswer.setResult(quiz.checkResult(userAnswer.getAnswers()));
+        // If instance has not yet initialized, create an empty one
+        if (this.mUserAnswersHashMap.get(quiz.getId()) == null){
+            UserAnswer ua = new UserAnswer();
+            ua.setQuizId(quiz.getId());
+            Set<String> empty = new HashSet<>(Arrays.asList());
+            ua.setAnswers(empty);
+            ua.setResult(false);
         } else {
-            // QuizType3
-            String s = "";
-            if(userAnswer.getAnswers()!=null) {
-                Iterator it = userAnswer.getAnswers().iterator();
-                while (it.hasNext()) {
-                    s = it.next().toString();
-                    userAnswer.setResult(((QuizType3) quiz).checkResult(s));
+            UserAnswer userAnswer = this.mUserAnswersHashMap.get(quiz.getId());
+            Log.d("TAG", "evaluateResult: " + userAnswer.toString());
+            if (!(quiz instanceof QuizType3)) {
+                // if answers has not yet added, add an empty one
+                if (userAnswer.getAnswers() == null) {
+                    userAnswer.setAnswers(new HashSet<>(Arrays.asList("")));
+                } else {
+                    userAnswer.setResult(quiz.checkResult(userAnswer.getAnswers()));
+                }
+            } else {
+                // QuizType3
+                String s = "";
+                if(userAnswer.getAnswers() == null) {
+                    userAnswer.setAnswers(new HashSet<>());
+                } else {
+                    Iterator it = userAnswer.getAnswers().iterator();
+                    while (it.hasNext()) {
+                        s = it.next().toString();
+                        userAnswer.setResult(((QuizType3) quiz).checkResult(s));
+                    }
                 }
             }
         }
+
     }
 }

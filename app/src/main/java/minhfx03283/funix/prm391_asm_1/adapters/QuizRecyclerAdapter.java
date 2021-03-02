@@ -35,6 +35,7 @@ import minhfx03283.funix.prm391_asm_1.models.QuizType2;
 import minhfx03283.funix.prm391_asm_1.models.QuizType3;
 import minhfx03283.funix.prm391_asm_1.models.UserAnswersSet;
 
+import static android.content.ContentValues.TAG;
 import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOUT_1;
 import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOUT_2;
 import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOUT_3;
@@ -66,7 +67,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes, UserAnswersSet userAnswersSet, List<Quiz> quizzes) {
+    public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes,
+                               UserAnswersSet userAnswersSet, List<Quiz> quizzes) {
         this.context = context;
         this.viewTypes = viewTypes;
         this.userAnswersSet = userAnswersSet;
@@ -81,8 +83,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             userAnswer.setQuizId(q.getId());
             userAnswer.setAnswers(emptySet);
 
-            userAnswersSet.getmUserAnswersHashMap()
-                    .put(q.getId(), userAnswer);
+            userAnswersSet.getmUserAnswersHashMap().put(q.getId(), userAnswer);
         }
     }
 
@@ -368,6 +369,31 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         this.userAnswersSet.getmUserAnswersHashMap().put(quizId, userAnswer);
     }
 
+    /**
+     * Configures Toast to display result
+     * @param countCorrect
+     */
+    public void bringToast(int countCorrect) {
+        String message = "";
+        String compliment = "";
+
+        //[Perfect!]|[Try again!]+" "+[You scored] + " " + %d + " " + [out of] + " " + %d
+        if (countCorrect == quizzes.size()) {
+            compliment = context.getResources().getString(R.string.perfect);
+        } else {
+            compliment = context.getResources().getString(R.string.try_again);
+        }
+        message = String.format("%s %s %s %s %s.",
+                compliment,
+                context.getResources().getString(R.string.scored_1),
+                String.valueOf(countCorrect),
+                context.getResources().getString(R.string.scored_2),
+                String.valueOf(quizzes.size()));
+
+        Log.d(TAG, "onClick: " + message);
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public int getItemCount() {
         return quizzes.size() + 1;
@@ -389,6 +415,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         }
         return LAYOUT_BUTTON;
     }
+
+
 
     /*
         ViewHolders classes below
@@ -504,6 +532,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
+
     public class ViewHolderType3 extends RecyclerView.ViewHolder {
         private LinearLayout linearLayout;
         private TextView tvQuestion;
@@ -575,10 +604,13 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             for (Quiz q : quizzes) {
                 userAnswersSet.evaluateResult(q);
             }
+
             int score = userAnswersSet.calculateScore();
+            bringToast(score);
+
             Log.d("button submit clicked", "submitButtonClicked: "
                     + userAnswersSet.getmUserAnswersHashMap().toString());
-            Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -599,6 +631,5 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         }
 
     }
-
 
 }

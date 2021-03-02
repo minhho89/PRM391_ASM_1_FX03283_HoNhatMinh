@@ -5,6 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.widget.Adapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,21 +17,27 @@ import java.util.Set;
 
 import minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerAdapter;
 import minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType;
+import minhfx03283.funix.prm391_asm_1.fragments.InputNameFragment;
 import minhfx03283.funix.prm391_asm_1.models.Quiz;
 import minhfx03283.funix.prm391_asm_1.models.QuizType1;
 import minhfx03283.funix.prm391_asm_1.models.QuizType2;
 import minhfx03283.funix.prm391_asm_1.models.QuizType3;
 import minhfx03283.funix.prm391_asm_1.models.UserAnswersSet;
 
-public class MainActivity extends AppCompatActivity {
-    UserAnswersSet userAnswersSet = new UserAnswersSet();
+public class MainActivity extends AppCompatActivity
+        implements InputNameFragment.NoticeDialogListener {
+    private UserAnswersSet mUserAnswersSet = new UserAnswersSet();
+    private List<Quiz> quizzes = new ArrayList<>();
+
+    private String mUserName;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List<Quiz> quizzes = addQuizzesInstance();
-
+        quizzes = addQuizzesInstance();
         // Get reference to RecyclerView
         RecyclerView rvQuiz = (RecyclerView) findViewById(R.id.recycler_view);
         //  Create and set the layout manager for RecyclerView
@@ -42,8 +51,17 @@ public class MainActivity extends AppCompatActivity {
         viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2));
         viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3));
 
-        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists, userAnswersSet, quizzes);
+        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists,
+                mUserAnswersSet, quizzes);
         rvQuiz.setAdapter(adapter);
+
+        if (mUserName == null) {
+            InputNameFragment inputNameFragment = new InputNameFragment();
+            inputNameFragment.show(getSupportFragmentManager(), "inputName");
+        } else {
+            TextView txtName = (TextView)findViewById(R.id.txt_name);
+            txtName.setText(mUserName);
+        }
 
     }
 
@@ -180,4 +198,42 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    public void onDialogPositiveClick(InputNameFragment dialog) {
+//        TextView txtName = (TextView)findViewById(R.id.txt_name);
+//        txtName.setText(dialog.getUserName());
+//        mUserName = dialog.getUserName();
+//
+//        TextView txtClock = (TextView)findViewById(R.id.txt_clock);
+//        insertCountDownClock(txtClock, adapter);
+    }
+
+    @Override
+    public void onDialogNegativeClick(InputNameFragment dialog) {
+//        TextView txtName = (TextView)findViewById(R.id.txt_name);
+//        txtName.setText(dialog.getUserName());
+//        mUserName = dialog.getUserName();
+//
+//        TextView txtClock = (TextView)findViewById(R.id.txt_clock);
+//        insertCountDownClock(txtClock, adapter);
+    }
+
+    private void insertCountDownClock(TextView txtClock, QuizRecyclerAdapter adapter) {
+        final CountDownTimer COUNTDOWN_TIMER = new CountDownTimer(120_000, 1_000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                txtClock.setText("your remaining time in second: " + millisUntilFinished / 1000);
+            }
+
+            @Override
+            public void onFinish() {
+                // Display the toast
+//                adapter.bringToast(adapter.getFinal_result());
+            }
+        };
+        COUNTDOWN_TIMER.start();
+    }
+
+
 }

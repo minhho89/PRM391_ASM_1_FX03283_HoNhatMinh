@@ -42,12 +42,25 @@ import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOU
 
 public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     // List of viewTypes
-    private final List<QuizRecyclerViewType> viewTypes;
-    private final UserAnswersSet userAnswersSet;
+    private List<QuizRecyclerViewType> viewTypes;
+    private UserAnswersSet userAnswersSet;
     private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
     Context context;
     // List of quizzes to feed data
     List<Quiz> quizzes;
+
+    public QuizRecyclerAdapter(Context context, UserAnswersSet userAnswersSet, List<Quiz> quizzes) {
+        this.context = context;
+
+        userAnswersSet.setUserAnswersHashMap(new HashMap<>());
+
+        // Initialize all of UserAnswers relative to quizzes
+        for (Quiz q : quizzes) {
+            Set<String> emptySet = new HashSet<>();
+            userAnswersSet.getmUserAnswersHashMap()
+                    .put(q.getId(), new UserAnswer(q.getId(), emptySet));
+        }
+    }
 
     public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes, UserAnswersSet userAnswersSet, List<Quiz> quizzes) {
         this.context = context;
@@ -63,6 +76,42 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             userAnswersSet.getmUserAnswersHashMap()
                     .put(q.getId(), new UserAnswer(q.getId(), emptySet));
         }
+    }
+
+    public List<QuizRecyclerViewType> getViewTypes() {
+        return viewTypes;
+    }
+
+    public void setViewTypes(List<QuizRecyclerViewType> viewTypes) {
+        this.viewTypes = viewTypes;
+    }
+
+    public UserAnswersSet getUserAnswersSet() {
+        return userAnswersSet;
+    }
+
+    public void setUserAnswersSet(UserAnswersSet userAnswersSet) {
+        this.userAnswersSet = userAnswersSet;
+    }
+
+    public HashMap<Integer, String> getRadioBtnCheckedHshMap() {
+        return radioBtnCheckedHshMap;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public List<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public void setQuizzes(List<Quiz> quizzes) {
+        this.quizzes = quizzes;
     }
 
     // Creates new ViewHolders (invoked by the layout manager)
@@ -213,8 +262,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     private void loadEditTextContents(Quiz quiz, EditText etAnswer) {
         if (userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()) != null
                 && userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers() != null
-                && !userAnswersSet.getmUserAnswersHashMap()
-                .get(quiz.getId()).getAnswers().isEmpty()) {
+                && !userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers().isEmpty()) {
             Iterator it = userAnswersSet.getmUserAnswersHashMap()
                     .get(quiz.getId()).getAnswers().iterator();
             // Since QuizType 3, user answers set just hold 1 item of String
@@ -328,7 +376,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     /*
         ViewHolders classes below
      */
-
     public class ViewHolderType1 extends RecyclerView.ViewHolder {
         private LinearLayout linearLayout;
         private TextView tvQuestion;

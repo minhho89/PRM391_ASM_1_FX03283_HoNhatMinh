@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import minhfx03283.funix.prm391_asm_1.R;
@@ -46,7 +47,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>();
 
     // List of viewTypes
-    private List<QuizRecyclerViewType> viewTypes;
+    private final List<QuizRecyclerViewType> viewTypes;
     private UserAnswersSet userAnswersSet;
     private Context context;
     // List of quizzes to feed data
@@ -231,8 +232,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         if (userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()) != null
                 && userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers() != null
                 && !userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers().isEmpty()) {
-            Iterator it = userAnswersSet.getmUserAnswersHashMap()
-                    .get(quiz.getId()).getAnswers().iterator();
+            Iterator it = Objects.requireNonNull(userAnswersSet.getmUserAnswersHashMap()
+                    .get(quiz.getId())).getAnswers().iterator();
             // Since QuizType 3, user answers set just hold 1 item of String
             etAnswer.setText(it.next().toString());
         }
@@ -490,13 +491,11 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_type_3);
             tvQuestion = (TextView) itemView.findViewById(R.id.tv_question);
             etAnswer = (EditText) itemView.findViewById(R.id.et_user_answer);
-
         }
 
         private void setTvQuestion(String text) {
             tvQuestion.setText(text);
         }
-
     }
 
     public class ViewHolderButton extends RecyclerView.ViewHolder {
@@ -536,7 +535,5 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                     + userAnswersSet.getmUserAnswersHashMap().toString());
 //            Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
         }
-
     }
-
 }

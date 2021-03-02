@@ -28,11 +28,11 @@ import java.util.List;
 import java.util.Set;
 
 import minhfx03283.funix.prm391_asm_1.R;
-import minhfx03283.funix.prm391_asm_1.models.UserAnswer;
 import minhfx03283.funix.prm391_asm_1.models.Quiz;
 import minhfx03283.funix.prm391_asm_1.models.QuizType1;
 import minhfx03283.funix.prm391_asm_1.models.QuizType2;
 import minhfx03283.funix.prm391_asm_1.models.QuizType3;
+import minhfx03283.funix.prm391_asm_1.models.UserAnswer;
 import minhfx03283.funix.prm391_asm_1.models.UserAnswersSet;
 
 import static android.content.ContentValues.TAG;
@@ -42,10 +42,12 @@ import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOU
 import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOUT_BUTTON;
 
 public class QuizRecyclerAdapter extends RecyclerView.Adapter {
+    // To store checked RadioButton
+    private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>();
+
     // List of viewTypes
     private List<QuizRecyclerViewType> viewTypes;
     private UserAnswersSet userAnswersSet;
-    private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
     private Context context;
     // List of quizzes to feed data
     private List<Quiz> quizzes;
@@ -276,6 +278,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * For QuizType 3, loads the contents of EditText that user have already entered.
+     *
      * @param quiz     current quiz
      * @param etAnswer current EditText
      */
@@ -293,6 +296,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     /**
      * For QuizType 2, loads the CheckBoxes state that user have already ticked.
      * Condition: quiz must be type2, answer must not be null
+     *
      * @param quiz current quiz
      * @param cb   current checkBox
      */
@@ -324,8 +328,9 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * Saves user answer to Hashmap (dataset) of Type 3
-     * @param quiz      current quiz
-     * @param editText  editText that user uses to enter answer
+     *
+     * @param quiz     current quiz
+     * @param editText editText that user uses to enter answer
      */
     private void saveAnswerType3(Quiz quiz, EditText editText) {
         UserAnswer userAnswer = new UserAnswer();
@@ -341,8 +346,9 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * Saves user answer to HashMap (dataset) of Type 2 quiz
-     * @param quiz      current quiz
-     * @param checkbox  checkbox that user uses to answer
+     *
+     * @param quiz     current quiz
+     * @param checkbox checkbox that user uses to answer
      */
     private void saveAnswerType2(Quiz quiz, CheckBox checkbox) {
         if (userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()) == null) {
@@ -366,8 +372,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 .remove(checkBox.getText().toString());
         checkBox.setChecked(false);
     }
+
     /**
      * Saves user answers to HashMap (dataset) of Type 1 quiz
+     *
      * @param answer user's answer
      * @param quizId quiz ID
      */
@@ -381,6 +389,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * Configures Toast to display result
+     *
      * @param countCorrect
      */
     public void bringToast(int countCorrect) {
@@ -425,7 +434,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         }
         return LAYOUT_BUTTON;
     }
-
 
 
     /*

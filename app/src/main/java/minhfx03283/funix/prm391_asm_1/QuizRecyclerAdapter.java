@@ -477,10 +477,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             int score = calculateScore(userAnswerHashMap);
             Log.d("button submit clicked", "submitButtonClicked: " + userAnswerHashMap.toString());
             Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
-
-
         }
-
 
         /**
          * Evaluates all the user answers at once.

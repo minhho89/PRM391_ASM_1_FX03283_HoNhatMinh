@@ -53,24 +53,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     private List<Quiz> quizzes;
     private int score;
 
-
-    public QuizRecyclerAdapter(Context context, UserAnswersSet userAnswersSet, List<Quiz> quizzes) {
-        this.context = context;
-
-        userAnswersSet.setUserAnswersHashMap(new HashMap<>());
-
-        // Initialize all of UserAnswers relative to quizzes
-        for (Quiz q : quizzes) {
-            Set<String> emptySet = new HashSet<>();
-            UserAnswer userAnswer = new UserAnswer();
-            userAnswer.setQuizId(q.getId());
-            userAnswer.setAnswers(emptySet);
-
-            userAnswersSet.getmUserAnswersHashMap()
-                    .put(q.getId(), userAnswer);
-        }
-    }
-
     public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes,
                                UserAnswersSet userAnswersSet, List<Quiz> quizzes) {
         this.context = context;
@@ -91,44 +73,9 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public List<QuizRecyclerViewType> getViewTypes() {
-        return viewTypes;
-    }
-
-    public void setViewTypes(List<QuizRecyclerViewType> viewTypes) {
-        this.viewTypes = viewTypes;
-    }
-
-    public UserAnswersSet getUserAnswersSet() {
-        return userAnswersSet;
-    }
-
-    public void setUserAnswersSet(UserAnswersSet userAnswersSet) {
-        this.userAnswersSet = userAnswersSet;
-    }
-
-    public HashMap<Integer, String> getRadioBtnCheckedHshMap() {
-        return radioBtnCheckedHshMap;
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    public List<Quiz> getQuizzes() {
-        return quizzes;
-    }
 
     public void setQuizzes(List<Quiz> quizzes) {
         this.quizzes = quizzes;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public void setScore(int score) {
@@ -166,7 +113,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final String TAG = "**Holder Load** ";
-
 
         // If position == quizzes.size() then button added
         if (position < quizzes.size()) {
@@ -226,7 +172,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                     loadCheckBoxCheckedStates(quiz, cb);
 
                     cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        final Set<String> checkedStringSet = new HashSet<>();
 
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -435,6 +380,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         return LAYOUT_BUTTON;
     }
 
+    public List<QuizRecyclerViewType> getViewTypes() {
+        return viewTypes;
+    }
+
 
     /*
         ViewHolders classes below
@@ -459,10 +408,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         // used further in onBindViewHold method.
         private void setTvQuestion(String text) {
             tvQuestion.setText(text);
-        }
-
-        public void setTvQuestion(TextView tvQuestion) {
-            this.tvQuestion = tvQuestion;
         }
 
         public RadioGroup getRdOptions() {
@@ -509,28 +454,12 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             return linearLayout;
         }
 
-        public void setLinearLayout(LinearLayout linearLayout) {
-            this.linearLayout = linearLayout;
-        }
-
         public LinearLayout getLinearLayoutCheckBoxes() {
             return linearLayoutCheckBoxes;
         }
 
-        public void setLinearLayoutCheckBoxes(LinearLayout linearLayoutCheckBoxes) {
-            this.linearLayoutCheckBoxes = linearLayoutCheckBoxes;
-        }
-
-        public TextView getTvQuestion() {
-            return tvQuestion;
-        }
-
         private void setTvQuestion(String text) {
             tvQuestion.setText(text);
-        }
-
-        public void setTvQuestion(TextView tvQuestion) {
-            this.tvQuestion = tvQuestion;
         }
 
         /**
@@ -564,37 +493,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
         }
 
-        public LinearLayout getLinearLayout() {
-            return linearLayout;
-        }
-
-        public void setLinearLayout(LinearLayout linearLayout) {
-            this.linearLayout = linearLayout;
-        }
-
-        public TextView getTvQuestion() {
-            return tvQuestion;
-        }
-
         private void setTvQuestion(String text) {
             tvQuestion.setText(text);
         }
 
-        public void setTvQuestion(TextView tvQuestion) {
-            this.tvQuestion = tvQuestion;
-        }
-
-        public EditText getEtAnswer() {
-            return etAnswer;
-        }
-
-        private void setEtAnswer(String text) {
-            etAnswer.setText(text);
-        }
-
-        public void setEtAnswer(EditText etAnswer) {
-            this.etAnswer = etAnswer;
-        }
     }
 
     public class ViewHolderButton extends RecyclerView.ViewHolder {
@@ -633,23 +535,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             Log.d("button submit clicked", "submitButtonClicked: "
                     + userAnswersSet.getmUserAnswersHashMap().toString());
 //            Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
-        }
-
-
-        public LinearLayout getLinearLayout() {
-            return linearLayout;
-        }
-
-        public void setLinearLayout(LinearLayout linearLayout) {
-            this.linearLayout = linearLayout;
-        }
-
-        public Button getButton() {
-            return button;
-        }
-
-        public void setButton(Button button) {
-            this.button = button;
         }
 
     }

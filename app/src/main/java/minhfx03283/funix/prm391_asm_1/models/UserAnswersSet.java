@@ -61,7 +61,7 @@ public class UserAnswersSet {
      * Evaluates an answer.
      * @param quiz
      */
-    private void evaluateResult(Quiz quiz) {
+    public void evaluateResult(Quiz quiz) {
         UserAnswer userAnswer = this.mUserAnswersHashMap.get(quiz.getId());
         if (!(quiz instanceof QuizType3)) {
             userAnswer.setResult(quiz.checkResult(userAnswer.getAnswers()));

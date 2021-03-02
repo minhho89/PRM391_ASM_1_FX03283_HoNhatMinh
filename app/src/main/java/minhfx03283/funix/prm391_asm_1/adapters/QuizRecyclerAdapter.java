@@ -483,55 +483,16 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
          * Handles activity when Submit button got clicked.
          */
         private void submitButtonClicked() {
-            View view = (View) LayoutInflater.from(context).inflate(R.layout.quiz_type_3, null);
-
             // Calculates score and displays by Toast
             for (Quiz q : quizzes) {
-                evaluateResult(q, userAnswersSet.getmUserAnswersHashMap());
+                userAnswersSet.evaluateResult(q);
             }
-            int score = calculateScore(userAnswersSet.getmUserAnswersHashMap());
-            Log.d("button submit clicked", "submitButtonClicked: " + userAnswersSet.getmUserAnswersHashMap().toString());
+            int score = userAnswersSet.calculateScore();
+            Log.d("button submit clicked", "submitButtonClicked: "
+                    + userAnswersSet.getmUserAnswersHashMap().toString());
             Toast.makeText(context, "" + score, Toast.LENGTH_SHORT).show();
         }
 
-        /**
-         * Evaluates all the user answers at once.
-         *
-         * @param quiz
-         * @param userAnswerHashMap
-         */
-        private void evaluateResult(Quiz quiz,
-                                    HashMap<Integer, UserAnswer> userAnswerHashMap) {
-            UserAnswer userAnswer = userAnswerHashMap.get(quiz.getId());
-            if (!(quiz instanceof QuizType3)) {
-                userAnswer.setResult(quiz.checkResult(userAnswer.getAnswers()));
-            } else {
-                // QuizType3
-                String s = "";
-                if (userAnswer.getAnswers() != null) {
-                    Iterator it = userAnswer.getAnswers().iterator();
-                    while (it.hasNext()) {
-                        s = it.next().toString();
-                        userAnswer.setResult(((QuizType3) quiz).checkResult(s));
-                    }
-                }
-            }
-        }
-
-        /**
-         * Counts the total correct answers.
-         *
-         * @param userAnswerHashMap
-         * @return
-         */
-        private int calculateScore(HashMap<Integer, UserAnswer> userAnswerHashMap) {
-            int count = 0;
-            for (Map.Entry m : userAnswerHashMap.entrySet()) {
-                UserAnswer userAnswer = (UserAnswer) m.getValue();
-                if (userAnswer.isResult()) count++;
-            }
-            return count;
-        }
 
         public LinearLayout getLinearLayout() {
             return linearLayout;

@@ -25,14 +25,14 @@ import minhfx03283.funix.prm391_asm_1.models.UserAnswersSet;
 
 public class MainActivity extends AppCompatActivity
         implements InputNameFragment.NoticeDialogListener {
-    List<QuizRecyclerViewType> viewTypeLists = new ArrayList<>(Arrays.asList(
+    List<QuizRecyclerViewType> mViewTypeLists = new ArrayList<>(Arrays.asList(
             new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_1),
             new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2),
             new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3)));
     private final UserAnswersSet mUserAnswersSet = new UserAnswersSet();
-    private List<Quiz> quizzes = new ArrayList<>();
-    QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists,
-            mUserAnswersSet, quizzes);
+    private List<Quiz> mQuizzes = new ArrayList<>();
+    QuizRecyclerAdapter mAdapter = new QuizRecyclerAdapter(this, mViewTypeLists,
+            mUserAnswersSet, mQuizzes);
     private String mUserName;
 
     @Override
@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvQuiz.setLayoutManager(layoutManager);
 
-        quizzes = addQuizzesInstance();
-        adapter.setQuizzes(quizzes);
-        rvQuiz.setAdapter(adapter);
+        mQuizzes = addQuizzesInstance();
+        mAdapter.setQuizzes(mQuizzes);
+        rvQuiz.setAdapter(mAdapter);
 
         TextView txtName = (TextView) findViewById(R.id.txt_name);
         if (mUserName == null) {
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
         //DNA
         QuizType1 q1 = new QuizType1();
         q1.setQuiz(getResources().getString(R.string.q1));
-        Set<String> q1Option = new HashSet<String>(
+        Set<String> q1Option = new HashSet<>(
                 Arrays.asList(
                         getResources().getString(R.string.q1_1),
                         getResources().getString(R.string.q1_2),
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         // 2. What process involves treating rubber with sulfur to harden it? (Correct Answer is "Vulcanizing")
         QuizType3 q2 = new QuizType3();
         q2.setQuiz(getResources().getString(R.string.q2));
-        Set<String> q2Answer = new HashSet<String>(Arrays.asList(getResources().getString(R.string.q2_ans)));
+        Set<String> q2Answer = new HashSet<>(Arrays.asList(getResources().getString(R.string.q2_ans)));
         q2.setAnswers(q2Answer);
 
         // 3. Name two different organelles of a eukaryotic cell. (Correct Answers are #1 (Ribosomes) and #3 (Golgi Apparatus))
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
         //Diploid
         QuizType2 q3 = new QuizType2();
         q3.setQuiz(getResources().getString(R.string.q3));
-        Set<String> q3Option = new HashSet<String>(Arrays.asList(
+        Set<String> q3Option = new HashSet<>(Arrays.asList(
                 getResources().getString(R.string.q3_1),
                 getResources().getString(R.string.q3_2),
                 getResources().getString(R.string.q3_3),
@@ -162,14 +162,14 @@ public class MainActivity extends AppCompatActivity
         //Stalagmites
         QuizType1 q9 = new QuizType1();
         q9.setQuiz(getResources().getString(R.string.q9));
-        q9.setOptionList(new HashSet<String>(Arrays.asList(getResources().getString(R.string.q9_1),
+        q9.setOptionList(new HashSet<>(Arrays.asList(getResources().getString(R.string.q9_1),
                 getResources().getString(R.string.q9_2))));
-        q9.setAnswers(new HashSet<String>(Arrays.asList(getResources().getString(R.string.q9_2))));
+        q9.setAnswers(new HashSet<>(Arrays.asList(getResources().getString(R.string.q9_2))));
 
         //10. What process involves heating an ore to obtain a metal? (Correct Answer is "Smelting")
         QuizType3 q10 = new QuizType3();
         q10.setQuiz(getResources().getString(R.string.q10));
-        q10.setAnswers(new HashSet<String>(Arrays.asList(getResources().getString(R.string.q10_ans))));
+        q10.setAnswers(new HashSet<>(Arrays.asList(getResources().getString(R.string.q10_ans))));
 
         // Add quiz to Quiz list
         quizzes.add(q1);
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity
         mUserName = dialog.getUserName();
 
         TextView txtClock = (TextView) findViewById(R.id.txt_clock);
-        insertCountDownClock(txtClock, adapter);
+        insertCountDownClock(txtClock, mAdapter);
     }
 
     @Override
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity
         mUserName = dialog.getUserName();
 
         TextView txtClock = (TextView) findViewById(R.id.txt_clock);
-        insertCountDownClock(txtClock, adapter);
+        insertCountDownClock(txtClock, mAdapter);
     }
 
     private void insertCountDownClock(TextView txtClock, QuizRecyclerAdapter adapter) {
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFinish() {
                 // Display the toast
-                for (Quiz q : quizzes) {
+                for (Quiz q : mQuizzes) {
                     mUserAnswersSet.evaluateResult(q);
                 }
 

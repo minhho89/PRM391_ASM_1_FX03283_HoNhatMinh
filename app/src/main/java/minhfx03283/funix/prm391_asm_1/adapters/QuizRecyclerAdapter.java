@@ -57,8 +57,12 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         // Initialize all of UserAnswers relative to quizzes
         for (Quiz q : quizzes) {
             Set<String> emptySet = new HashSet<>();
+            UserAnswer userAnswer = new UserAnswer();
+            userAnswer.setQuizId(q.getId());
+            userAnswer.setAnswers(emptySet);
+
             userAnswersSet.getmUserAnswersHashMap()
-                    .put(q.getId(), new UserAnswer(q.getId(), emptySet));
+                    .put(q.getId(), userAnswer);
         }
     }
 
@@ -73,8 +77,12 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         // Initialize all of UserAnswers relative to quizzes
         for (Quiz q : quizzes) {
             Set<String> emptySet = new HashSet<>();
+            UserAnswer userAnswer = new UserAnswer();
+            userAnswer.setQuizId(q.getId());
+            userAnswer.setAnswers(emptySet);
+
             userAnswersSet.getmUserAnswersHashMap()
-                    .put(q.getId(), new UserAnswer(q.getId(), emptySet));
+                    .put(q.getId(), userAnswer);
         }
     }
 
@@ -145,6 +153,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final String TAG = "**Holder Load** ";
+
 
         // If position == quizzes.size() then button added
         if (position < quizzes.size()) {
@@ -251,7 +260,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 });
             }
         }
-
+        Log.d(TAG, "onBindViewHolder: " + userAnswersSet.getmUserAnswersHashMap().toString());
     }
 
     /**
@@ -278,6 +287,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
      */
     private void loadCheckBoxCheckedStates(Quiz quiz, CheckBox cb) {
         if (quiz instanceof QuizType2 &&
+                userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()) != null &&
                 userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers() != null) {
             for (String s : userAnswersSet.getmUserAnswersHashMap()
                     .get(quiz.getId()).getAnswers()) {
@@ -324,6 +334,13 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
      * @param checkbox  checkbox that user uses to answer
      */
     private void saveAnswerType2(Quiz quiz, CheckBox checkbox) {
+        if (userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()) == null) {
+            UserAnswer ua = new UserAnswer();
+            ua.setQuizId(quiz.getId());
+            ua.setAnswers(new HashSet<>());
+            userAnswersSet.getmUserAnswersHashMap().put(quiz.getId(), ua);
+        }
+
         userAnswersSet.getmUserAnswersHashMap()
                 .get(quiz.getId()).getAnswers()
                 .add(checkbox.getText().toString());

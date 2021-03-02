@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Adapter;
 import android.widget.TextView;
 
@@ -30,6 +32,13 @@ public class MainActivity extends AppCompatActivity
     private List<Quiz> quizzes = new ArrayList<>();
 
     private String mUserName;
+    List<QuizRecyclerViewType> viewTypeLists = new ArrayList<>(Arrays.asList(
+            new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_1),
+            new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2),
+            new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3)));
+
+    QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists,
+            mUserAnswersSet, quizzes);
 
 
     @Override
@@ -37,31 +46,27 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        quizzes = addQuizzesInstance();
+
         // Get reference to RecyclerView
         RecyclerView rvQuiz = (RecyclerView) findViewById(R.id.recycler_view);
         //  Create and set the layout manager for RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvQuiz.setLayoutManager(layoutManager);
 
-        List<QuizRecyclerViewType> viewTypeLists = new ArrayList<>();
-
-        // Pass the arguments
-        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_1));
-        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2));
-        viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3));
-
-        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists,
-                mUserAnswersSet, quizzes);
+        quizzes = addQuizzesInstance();
+        adapter.setQuizzes(quizzes);
         rvQuiz.setAdapter(adapter);
 
+        TextView txtName = (TextView)findViewById(R.id.txt_name);
         if (mUserName == null) {
             InputNameFragment inputNameFragment = new InputNameFragment();
             inputNameFragment.show(getSupportFragmentManager(), "inputName");
         } else {
-            TextView txtName = (TextView)findViewById(R.id.txt_name);
             txtName.setText(mUserName);
         }
+
+
+
 
     }
 
@@ -186,36 +191,31 @@ public class MainActivity extends AppCompatActivity
         quizzes.add(q9);
         quizzes.add(q10);
 
-
 //        quizzes.add(q1);
 //        quizzes.add(q2);
 //        quizzes.add(q3);
 //        quizzes.add(q4);
 //        quizzes.add(q5);
-
-
         return quizzes;
-
-
     }
     @Override
     public void onDialogPositiveClick(InputNameFragment dialog) {
-//        TextView txtName = (TextView)findViewById(R.id.txt_name);
-//        txtName.setText(dialog.getUserName());
-//        mUserName = dialog.getUserName();
-//
-//        TextView txtClock = (TextView)findViewById(R.id.txt_clock);
-//        insertCountDownClock(txtClock, adapter);
+        TextView txtName = (TextView)findViewById(R.id.txt_name);
+        txtName.setText(dialog.getUserName());
+        mUserName = dialog.getUserName();
+
+        TextView txtClock = (TextView)findViewById(R.id.txt_clock);
+        insertCountDownClock(txtClock, adapter);
     }
 
     @Override
     public void onDialogNegativeClick(InputNameFragment dialog) {
-//        TextView txtName = (TextView)findViewById(R.id.txt_name);
-//        txtName.setText(dialog.getUserName());
-//        mUserName = dialog.getUserName();
-//
-//        TextView txtClock = (TextView)findViewById(R.id.txt_clock);
-//        insertCountDownClock(txtClock, adapter);
+        TextView txtName = (TextView)findViewById(R.id.txt_name);
+        txtName.setText(dialog.getUserName());
+        mUserName = dialog.getUserName();
+
+        TextView txtClock = (TextView)findViewById(R.id.txt_clock);
+        insertCountDownClock(txtClock, adapter);
     }
 
     private void insertCountDownClock(TextView txtClock, QuizRecyclerAdapter adapter) {

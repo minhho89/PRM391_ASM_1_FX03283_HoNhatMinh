@@ -2,6 +2,7 @@ package minhfx03283.funix.prm391_asm_1.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -74,6 +75,20 @@ public class InputNameFragment extends DialogFragment {
         Dialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
+    }
+    // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            listener = (NoticeDialogListener) context;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(this.getActivity().toString()
+                    + " must implement NoticeDialogListener");
+        }
     }
 
     /* The activity that creates an instance of this dialog fragment must

@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import minhfx03283.funix.prm391_asm_1.R;
@@ -45,7 +44,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     // List of viewTypes
     private final List<QuizRecyclerViewType> viewTypes;
     private final UserAnswersSet userAnswersSet;
-//    private final HashMap<Integer, UserAnswer> userAnswerHashMap; // to store user answers
     private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
     Context context;
     // List of quizzes to feed data
@@ -113,7 +111,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 holderType1.removeDuplicate(holderType1.getRdOptions());
 
                 // Add radioButtons
-
                 for (String s : quizType1.getOptionList()) {
                     RadioButton rb = new RadioButton(
                             holderType1.getLinearLayout().getContext());
@@ -144,7 +141,6 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
             if (quiz instanceof QuizType2) {
                 // Views of Type 2 quiz
-
                 ViewHolderType2 holderType2 = (ViewHolderType2) holder;
                 QuizType2 quizType2 = (QuizType2) quiz;
                 holderType2.setTvQuestion(numberOrder + quizType2.getQuiz());
@@ -152,6 +148,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 // Remove checkboxes from duplicating
                 holderType2.removeDuplicate(holderType2.getLinearLayoutCheckBoxes());
 
+                // Add checkBoxes
                 for (String s : quizType2.getOptionList()) {
                     CheckBox cb = new CheckBox(
                             holderType2.getLinearLayout().getContext());
@@ -187,7 +184,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             }
 
             if (quiz instanceof QuizType3) {
-                holder.setIsRecyclable(false);
+                // Views of QuizType 3
+                holder.setIsRecyclable(false); // Work around bug of recycler View for EditText
                 ViewHolderType3 holderType3 = (ViewHolderType3) holder;
                 QuizType3 quizType3 = (QuizType3) quiz;
                 holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());
@@ -196,6 +194,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                 // Load editText contents
                 loadEditTextContents(quiz, etAnswer);
 
+                // Handle text change
                 etAnswer.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -305,6 +304,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         }
         return LAYOUT_BUTTON;
     }
+
+    /*
+        ViewHolders classes below
+     */
 
     public class ViewHolderType1 extends RecyclerView.ViewHolder {
         private LinearLayout linearLayout;

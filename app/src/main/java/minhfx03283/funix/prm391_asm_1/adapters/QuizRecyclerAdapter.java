@@ -46,9 +46,11 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     private List<QuizRecyclerViewType> viewTypes;
     private UserAnswersSet userAnswersSet;
     private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
-    Context context;
+    private Context context;
     // List of quizzes to feed data
-    List<Quiz> quizzes;
+    private List<Quiz> quizzes;
+    private int score;
+
 
     public QuizRecyclerAdapter(Context context, UserAnswersSet userAnswersSet, List<Quiz> quizzes) {
         this.context = context;
@@ -121,6 +123,14 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     public void setQuizzes(List<Quiz> quizzes) {
         this.quizzes = quizzes;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     // Creates new ViewHolders (invoked by the layout manager)
@@ -599,13 +609,17 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
         /**
          * Handles activity when Submit button got clicked.
          */
-        private void submitButtonClicked() {
+        public void submitButtonClicked() {
             // Calculates score and displays by Toast
+
+            // Evaluates all answers
             for (Quiz q : quizzes) {
                 userAnswersSet.evaluateResult(q);
             }
 
-            int score = userAnswersSet.calculateScore();
+            // set score for adapter
+            setScore(userAnswersSet.calculateScore());
+
             bringToast(score);
 
             Log.d("button submit clicked", "submitButtonClicked: "

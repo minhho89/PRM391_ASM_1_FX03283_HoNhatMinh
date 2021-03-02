@@ -223,13 +223,18 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onTick(long millisUntilFinished) {
-                txtClock.setText("your remaining time in second: " + millisUntilFinished / 1000);
+                txtClock.setText("" + millisUntilFinished / 1000);
             }
 
             @Override
             public void onFinish() {
                 // Display the toast
-//                adapter.bringToast(adapter.getFinal_result());
+                for (Quiz q : quizzes) {
+                    mUserAnswersSet.evaluateResult(q);
+                }
+
+                mUserAnswersSet.setScore(mUserAnswersSet.calculateScore());
+                adapter.bringToast(mUserAnswersSet.getScore());
             }
         };
         COUNTDOWN_TIMER.start();

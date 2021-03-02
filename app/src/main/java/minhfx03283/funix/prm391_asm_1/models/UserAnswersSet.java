@@ -63,7 +63,7 @@ public class UserAnswersSet {
     }
 
     /**
-     * Evaluates an answer.
+     * Evaluates an answer, set field result of an instance of UserAnswer.
      * @param quiz
      */
     public void evaluateResult(Quiz quiz) {

@@ -1,4 +1,4 @@
-package minhfx03283.funix.prm391_asm_1;
+package minhfx03283.funix.prm391_asm_1.adapters;
 
 import android.content.Context;
 import android.text.Editable;
@@ -28,17 +28,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_1;
-import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_2;
-import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_3;
-import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_BUTTON;
+import minhfx03283.funix.prm391_asm_1.R;
+import minhfx03283.funix.prm391_asm_1.models.UserAnswer;
+import minhfx03283.funix.prm391_asm_1.models.Quiz;
+import minhfx03283.funix.prm391_asm_1.models.QuizType1;
+import minhfx03283.funix.prm391_asm_1.models.QuizType2;
+import minhfx03283.funix.prm391_asm_1.models.QuizType3;
+
+import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOUT_1;
+import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOUT_2;
+import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOUT_3;
+import static minhfx03283.funix.prm391_asm_1.adapters.QuizRecyclerViewType.LAYOUT_BUTTON;
 
 public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     // List of viewTypes
     private final List<QuizRecyclerViewType> viewTypes;
     private final HashMap<Integer, UserAnswer> userAnswerHashMap; // to store user answers
     private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
-    private final HashMap<Integer, Set<String>> checkBoxCheckedHshMap = new HashMap<>(); // to store checked CheckedBoxes
     Context context;
     // List of quizzes to feed data
     List<Quiz> quizzes;

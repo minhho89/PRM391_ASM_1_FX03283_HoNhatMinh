@@ -207,14 +207,14 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * For QuizType 3, loads the contents of EditText that user have already entered.
-     *
      * @param quiz     current quiz
      * @param etAnswer current EditText
      */
     private void loadEditTextContents(Quiz quiz, EditText etAnswer) {
         if (userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()) != null
                 && userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers() != null
-                && !userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers().isEmpty()) {
+                && !userAnswersSet.getmUserAnswersHashMap()
+                .get(quiz.getId()).getAnswers().isEmpty()) {
             Iterator it = userAnswersSet.getmUserAnswersHashMap()
                     .get(quiz.getId()).getAnswers().iterator();
             // Since QuizType 3, user answers set just hold 1 item of String
@@ -231,7 +231,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     private void loadCheckBoxCheckedStates(Quiz quiz, CheckBox cb) {
         if (quiz instanceof QuizType2 &&
                 userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers() != null) {
-            for (String s : userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers()) {
+            for (String s : userAnswersSet.getmUserAnswersHashMap()
+                    .get(quiz.getId()).getAnswers()) {
                 if (s.equalsIgnoreCase(cb.getText().toString())) {
                     cb.setChecked(true);
                 }

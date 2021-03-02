@@ -20,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.zip.Inflater;
 
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_1;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_2;
@@ -36,14 +34,14 @@ import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_3;
 import static minhfx03283.funix.prm391_asm_1.QuizRecyclerViewType.LAYOUT_BUTTON;
 
 public class QuizRecyclerAdapter extends RecyclerView.Adapter {
-    Context context;
-    // List of quizzes to feed data
-    List<Quiz> quizzes;
     // List of viewTypes
     private final List<QuizRecyclerViewType> viewTypes;
     private final HashMap<Integer, UserAnswer> userAnswerHashMap; // to store user answers
     private final HashMap<Integer, String> radioBtnCheckedHshMap = new HashMap<>(); // to store checked RadioButton
     private final HashMap<Integer, Set<String>> checkBoxCheckedHshMap = new HashMap<>(); // to store checked CheckedBoxes
+    Context context;
+    // List of quizzes to feed data
+    List<Quiz> quizzes;
 
     public QuizRecyclerAdapter(Context context, List<QuizRecyclerViewType> viewTypes, List<Quiz> quizzes) {
         this.context = context;
@@ -212,7 +210,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * For QuizType 3, loads the contents of EditText that user have already entered.
-     * @param quiz current quiz
+     *
+     * @param quiz     current quiz
      * @param etAnswer current EditText
      */
     private void loadEditTextContents(Quiz quiz, EditText etAnswer) {
@@ -227,8 +226,9 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * For QuizType 2, loads the CheckBoxes state that user have already ticked.
+     *
      * @param quiz current quiz
-     * @param cb current checkBox
+     * @param cb   current checkBox
      */
     private void loadCheckBoxCheckedStated(Quiz quiz, CheckBox cb) {
         if (quiz instanceof QuizType2 &&
@@ -238,14 +238,14 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                     cb.setChecked(true);
                 }
             }
-
         }
     }
 
     /**
      * For QuizType 1, loads the checked state of a radioButton that user already checked.
+     *
      * @param quiz current quiz
-     * @param rb current checkbox
+     * @param rb   current checkbox
      */
     private void loadRadioButtonCheckedState(Quiz quiz, RadioButton rb) {
         if (quiz instanceof QuizType1 &&
@@ -391,7 +391,13 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
          * @param layoutCheckBoxes ViewHolder's linearLayout that holds checkBox items.
          */
         public void removeDuplicate(LinearLayout layoutCheckBoxes) {
-            layoutCheckBoxes.removeAllViews();
+            if (layoutCheckBoxes.getChildCount() > 0) {
+                for (int i = 0; i < layoutCheckBoxes.getChildCount(); i++) {
+                    if (layoutCheckBoxes.getChildAt(i) instanceof CheckBox) {
+                        layoutCheckBoxes.removeAllViews();
+                    }
+                }
+            }
         }
     }
 
@@ -462,20 +468,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
          * Handles activity when Submit button got clicked.
          */
         private void submitButtonClicked() {
-            View view = (View)LayoutInflater.from(context).inflate(R.layout.quiz_type_3, null);
-            EditText etAnswer = (EditText)view.findViewById(R.id.et_user_answer);
-
-            // Handles last editText View in case of user clicks button without leaving it.
-            // First checks if the last view is a editText or not
-            // TODO:  checks if the last view is a editText or not
-            if(isLastViewEditText(quizzes)) {
-                // Then save the answer to HashMap
-//                UserAnswer userAnswer = new UserAnswer();
-//                userAnswer.setQuizId(quizzes.get(quizzes.size()-1).getId());
-//                userAnswer.setAnswers(new HashSet<>(Arrays.asList(etAnswer.getText().toString())));
-//                // TODO: adds userAnswer in editText to HashMap
-//                userAnswerHashMap.put(userAnswer.getQuizId(), userAnswer);
-            }
+            View view = (View) LayoutInflater.from(context).inflate(R.layout.quiz_type_3, null);
 
             // Calculates score and displays by Toast
             for (Quiz q : quizzes) {
@@ -488,14 +481,10 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
         }
 
-        private boolean isLastViewEditText(List<Quiz> quizzes) {
-            int lastViewPosition = quizzes.size() - 1;
-            return (quizzes.get(lastViewPosition) instanceof QuizType3);
-
-        }
 
         /**
          * Evaluates all the user answers at once.
+         *
          * @param quiz
          * @param userAnswerHashMap
          */
@@ -507,7 +496,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             } else {
                 // QuizType3
                 String s = "";
-                if(userAnswer.getAnswers()!=null) {
+                if (userAnswer.getAnswers() != null) {
                     Iterator it = userAnswer.getAnswers().iterator();
                     while (it.hasNext()) {
                         s = it.next().toString();
@@ -519,6 +508,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
         /**
          * Counts the total correct answers.
+         *
          * @param userAnswerHashMap
          * @return
          */

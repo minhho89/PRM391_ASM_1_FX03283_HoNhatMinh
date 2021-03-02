@@ -18,9 +18,10 @@ import minhfx03283.funix.prm391_asm_1.models.Quiz;
 import minhfx03283.funix.prm391_asm_1.models.QuizType1;
 import minhfx03283.funix.prm391_asm_1.models.QuizType2;
 import minhfx03283.funix.prm391_asm_1.models.QuizType3;
+import minhfx03283.funix.prm391_asm_1.models.UserAnswersSet;
 
 public class MainActivity extends AppCompatActivity {
-
+    UserAnswersSet userAnswersSet = new UserAnswersSet();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2));
         viewTypeLists.add(new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3));
 
-        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists, quizzes);
+        QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists, userAnswersSet, quizzes);
         rvQuiz.setAdapter(adapter);
 
     }

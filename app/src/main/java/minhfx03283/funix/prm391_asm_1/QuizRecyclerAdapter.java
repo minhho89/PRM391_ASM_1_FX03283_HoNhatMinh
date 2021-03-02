@@ -176,6 +176,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             }
 
             if (quiz instanceof QuizType3) {
+                holder.setIsRecyclable(false);
                 ViewHolderType3 holderType3 = (ViewHolderType3) holder;
                 QuizType3 quizType3 = (QuizType3) quiz;
                 holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());

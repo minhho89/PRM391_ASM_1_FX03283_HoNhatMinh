@@ -211,6 +211,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                         Set<String> answerSet = new HashSet<>();
                         userAnswer.setQuizId(quiz.getId());
 
+                        // Save answer to HashMap
                         answerSet.add(etAnswer.getText().toString());
                         userAnswer.setAnswers(answerSet);
                         userAnswersSet.getmUserAnswersHashMap()

@@ -1,15 +1,12 @@
 package minhfx03283.funix.prm391_asm_1;
 
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Adapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,18 +25,15 @@ import minhfx03283.funix.prm391_asm_1.models.UserAnswersSet;
 
 public class MainActivity extends AppCompatActivity
         implements InputNameFragment.NoticeDialogListener {
-    private UserAnswersSet mUserAnswersSet = new UserAnswersSet();
-    private List<Quiz> quizzes = new ArrayList<>();
-
-    private String mUserName;
     List<QuizRecyclerViewType> viewTypeLists = new ArrayList<>(Arrays.asList(
             new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_1),
             new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_2),
             new QuizRecyclerViewType(QuizRecyclerViewType.LAYOUT_3)));
-
+    private final UserAnswersSet mUserAnswersSet = new UserAnswersSet();
+    private List<Quiz> quizzes = new ArrayList<>();
     QuizRecyclerAdapter adapter = new QuizRecyclerAdapter(this, viewTypeLists,
             mUserAnswersSet, quizzes);
-
+    private String mUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +51,13 @@ public class MainActivity extends AppCompatActivity
         adapter.setQuizzes(quizzes);
         rvQuiz.setAdapter(adapter);
 
-        TextView txtName = (TextView)findViewById(R.id.txt_name);
+        TextView txtName = (TextView) findViewById(R.id.txt_name);
         if (mUserName == null) {
             InputNameFragment inputNameFragment = new InputNameFragment();
             inputNameFragment.show(getSupportFragmentManager(), "inputName");
         } else {
             txtName.setText(mUserName);
         }
-
-
 
 
     }
@@ -148,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         //Earth
         //Pluto
         QuizType2 q7 = new QuizType2();
-        q7.setQuiz( getResources().getString(R.string.q7));
+        q7.setQuiz(getResources().getString(R.string.q7));
         Set<String> q7Option = new HashSet<>(Arrays.asList(
                 getResources().getString(R.string.q7_1),
                 getResources().getString(R.string.q7_2),
@@ -162,7 +154,7 @@ public class MainActivity extends AppCompatActivity
 
         //8. Where in the human body would you find the scaphoid bone? (Correct Answer is "Wrist")
         QuizType3 q8 = new QuizType3();
-        q8.setQuiz( getResources().getString(R.string.q8));
+        q8.setQuiz(getResources().getString(R.string.q8));
         q8.setAnswers(new HashSet<String>(Arrays.asList(getResources().getString(R.string.q8_ans))));
 
         //9. Which grow upwards Stalactites or Stalagmites? (Correct Answers is #2 "Stalagmites")
@@ -198,23 +190,24 @@ public class MainActivity extends AppCompatActivity
 //        quizzes.add(q5);
         return quizzes;
     }
+
     @Override
     public void onDialogPositiveClick(InputNameFragment dialog) {
-        TextView txtName = (TextView)findViewById(R.id.txt_name);
+        TextView txtName = (TextView) findViewById(R.id.txt_name);
         txtName.setText(dialog.getUserName());
         mUserName = dialog.getUserName();
 
-        TextView txtClock = (TextView)findViewById(R.id.txt_clock);
+        TextView txtClock = (TextView) findViewById(R.id.txt_clock);
         insertCountDownClock(txtClock, adapter);
     }
 
     @Override
     public void onDialogNegativeClick(InputNameFragment dialog) {
-        TextView txtName = (TextView)findViewById(R.id.txt_name);
+        TextView txtName = (TextView) findViewById(R.id.txt_name);
         txtName.setText(dialog.getUserName());
         mUserName = dialog.getUserName();
 
-        TextView txtClock = (TextView)findViewById(R.id.txt_clock);
+        TextView txtClock = (TextView) findViewById(R.id.txt_clock);
         insertCountDownClock(txtClock, adapter);
     }
 
@@ -223,7 +216,13 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onTick(long millisUntilFinished) {
+
+                // Clock turns red when millisUntilFinished <= 30
+                if (millisUntilFinished <= 30_000) {
+                    txtClock.setTextColor(getResources().getColor(R.color.design_default_color_error));
+                }
                 txtClock.setText("" + millisUntilFinished / 1000);
+
             }
 
             @Override

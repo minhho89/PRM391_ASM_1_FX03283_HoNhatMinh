@@ -22,14 +22,6 @@ public class InputNameFragment extends DialogFragment {
     public InputNameFragment() {
     }
 
-    public NoticeDialogListener getListener() {
-        return listener;
-    }
-
-    public void setListener(NoticeDialogListener listener) {
-        this.listener = listener;
-    }
-
     public String getUserName() {
         return mUserName;
     }
@@ -48,9 +40,6 @@ public class InputNameFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.dialog_name_input, null);
         EditText editText = (EditText) dialogLayout.findViewById(R.id.edt_name_input);
-
-        // Get activity_main inflater
-        View mainLayout = inflater.inflate(R.layout.activity_main, null);
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
@@ -98,7 +87,6 @@ public class InputNameFragment extends DialogFragment {
         void onDialogPositiveClick(InputNameFragment dialog);
 
         void onDialogNegativeClick(InputNameFragment dialog);
-
 
     }
 }

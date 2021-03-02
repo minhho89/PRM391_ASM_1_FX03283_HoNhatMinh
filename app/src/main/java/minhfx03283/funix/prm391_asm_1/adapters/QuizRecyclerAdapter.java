@@ -127,11 +127,9 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                             boolean isChecked = rb.isChecked();
                             // Save answer to userAnswer
                             if (isChecked) {
-                                saveAnswerType1(userAnswersSet.getmUserAnswersHashMap(),
-                                        rb.getText().toString(), quiz.getId());
+                                saveAnswerType1(rb.getText().toString(), quiz.getId());
                                 // Save state of selection
-                                radioBtnCheckedHshMap.put(quiz.getId(),
-                                        rb.getText().toString());
+                                radioBtnCheckedHshMap.put(quiz.getId(), rb.getText().toString());
                             }
                         }
                     });
@@ -150,12 +148,11 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
                 // Add checkBoxes
                 for (String s : quizType2.getOptionList()) {
-                    CheckBox cb = new CheckBox(
-                            holderType2.getLinearLayout().getContext());
+                    CheckBox cb = new CheckBox(holderType2.getLinearLayout().getContext());
                     cb.setText(s);
                     holderType2.getLinearLayout().addView(cb);
 
-                    loadCheckBoxCheckedStated(quiz, cb);
+                    loadCheckBoxCheckedStates(quiz, cb);
 
                     cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         final Set<String> checkedStringSet = new HashSet<>();
@@ -163,19 +160,13 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             // Load checked state
-                            loadCheckBoxCheckedStated(quiz, cb);
-
-                            String buttonText = cb.getText().toString();
+                            loadCheckBoxCheckedStates(quiz, cb);
                             if (isChecked) {
                                 // Save user choices to HashMap
-                                userAnswersSet.getmUserAnswersHashMap()
-                                        .get(quiz.getId()).getAnswers()
-                                        .add(buttonText);
+                                saveAnswerType2(quiz, cb);
                             } else {
                                 // Remove choices from HashMap
-                                userAnswersSet.getmUserAnswersHashMap()
-                                        .get(quiz.getId()).getAnswers()
-                                        .remove(buttonText);
+                                removeAnswerType2(quiz, cb);
                                 cb.setChecked(false);
                             }
                         }
@@ -184,8 +175,8 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
             }
 
             if (quiz instanceof QuizType3) {
-                // Views of QuizType 3
                 holder.setIsRecyclable(false); // Work around bug of recycler View for EditText
+                // Views of QuizType 3
                 ViewHolderType3 holderType3 = (ViewHolderType3) holder;
                 QuizType3 quizType3 = (QuizType3) quiz;
                 holderType3.setTvQuestion(numberOrder + quizType3.getQuiz());
@@ -206,15 +197,7 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
                     @Override
                     public void afterTextChanged(Editable s) {
-                        UserAnswer userAnswer = new UserAnswer();
-                        Set<String> answerSet = new HashSet<>();
-                        userAnswer.setQuizId(quiz.getId());
-
-                        // Save answer to HashMap
-                        answerSet.add(etAnswer.getText().toString());
-                        userAnswer.setAnswers(answerSet);
-                        userAnswersSet.getmUserAnswersHashMap()
-                                .put(quiz.getId(), userAnswer);
+                        saveAnswerType3(quiz, etAnswer);
                     }
                 });
             }
@@ -241,11 +224,11 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
 
     /**
      * For QuizType 2, loads the CheckBoxes state that user have already ticked.
-     *
+     * Condition: quiz must be type2, answer must not be null
      * @param quiz current quiz
      * @param cb   current checkBox
      */
-    private void loadCheckBoxCheckedStated(Quiz quiz, CheckBox cb) {
+    private void loadCheckBoxCheckedStates(Quiz quiz, CheckBox cb) {
         if (quiz instanceof QuizType2 &&
                 userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers() != null) {
             for (String s : userAnswersSet.getmUserAnswersHashMap().get(quiz.getId()).getAnswers()) {
@@ -270,12 +253,48 @@ public class QuizRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     /**
-     * Saves user answers to HashMap (dataset) of Type 1 quiz
-     *
-     * @param userAnswerHashMap
+     * Saves user answer to Hashmap (dataset) of Type 3
+     * @param quiz      current quiz
+     * @param editText  editText that user uses to enter answer
      */
-    private void saveAnswerType1(HashMap<Integer, UserAnswer> userAnswerHashMap,
-                                 String answer, int quizId) {
+    private void saveAnswerType3(Quiz quiz, EditText editText) {
+        UserAnswer userAnswer = new UserAnswer();
+        Set<String> answerSet = new HashSet<>();
+        userAnswer.setQuizId(quiz.getId());
+
+        // Save answer to HashMap
+        answerSet.add(editText.getText().toString());
+        userAnswer.setAnswers(answerSet);
+        userAnswersSet.getmUserAnswersHashMap()
+                .put(quiz.getId(), userAnswer);
+    }
+
+    /**
+     * Saves user answer to HashMap (dataset) of Type 2 quiz
+     * @param quiz      current quiz
+     * @param checkbox  checkbox that user uses to answer
+     */
+    private void saveAnswerType2(Quiz quiz, CheckBox checkbox) {
+        userAnswersSet.getmUserAnswersHashMap()
+                .get(quiz.getId()).getAnswers()
+                .add(checkbox.getText().toString());
+    }
+
+    /**
+     * Removes user answer from HashMap (dataset) of Type 2 quiz
+     */
+    private void removeAnswerType2(Quiz quiz, CheckBox checkBox) {
+        userAnswersSet.getmUserAnswersHashMap()
+                .get(quiz.getId()).getAnswers()
+                .remove(checkBox.getText().toString());
+        checkBox.setChecked(false);
+    }
+    /**
+     * Saves user answers to HashMap (dataset) of Type 1 quiz
+     * @param answer user's answer
+     * @param quizId quiz ID
+     */
+    private void saveAnswerType1(String answer, int quizId) {
         UserAnswer userAnswer = new UserAnswer();
         Set<String> answers = new HashSet<String>(Arrays.asList(answer));
         userAnswer.setQuizId(quizId);

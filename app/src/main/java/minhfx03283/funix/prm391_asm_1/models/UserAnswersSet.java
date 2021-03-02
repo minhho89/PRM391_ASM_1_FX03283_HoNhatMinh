@@ -5,6 +5,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class UserAnswersSet {
+    public HashMap<Integer, UserAnswer> userAnswersHashMap() {
+        return mUserAnswersHashMap;
+    }
+
     private HashMap<Integer, UserAnswer> mUserAnswersHashMap;
     private int mScore;
 
@@ -15,13 +19,15 @@ public class UserAnswersSet {
         this.mUserAnswersHashMap = userAnswerHashMap;
     }
 
-    public HashMap<Integer, UserAnswer> getUserAnswersSets() {
+    public HashMap<Integer, UserAnswer> getmUserAnswersHashMap() {
         return mUserAnswersHashMap;
     }
 
-    public void setUserAnswersSets(HashMap<Integer, UserAnswer> mUserAnswersSets) {
-        this.mUserAnswersHashMap = mUserAnswersSets;
+    public void setUserAnswersHashMap(HashMap<Integer, UserAnswer> userAnswersHashMap) {
+        this.mUserAnswersHashMap = userAnswersHashMap;
     }
+
+
 
     public int getScore() {
         return mScore;
